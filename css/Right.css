@@ -33,9 +33,11 @@
 .feeds-search input { padding: 10px; padding-left: 35px; border: 1px solid #eee; width: 100%; font-family: Roboto; font-size: 16px; font-weight: 100; line-height: 20px; transition: all 0.3s; border-radius: 30px }
 .feeds-search input::-ms-clear { display: none }
 .feeds-search input:focus { outline: none; border-color: #A468F4; }
+.feeds-search-center { margin: 0 auto !important; padding: 0 !important; margin-top: 64px !important; }
 .search-noresult { text-align: center; margin: 100px 50px; font-family: Roboto; font-weight: 100; font-size: 18px; }
 .search-info { right: -29px; color: #AAA; position: absolute; font-size: 13px; margin-top: -28px; }
-.feeds-line { position: absolute; border-right: 1px solid #eee; height: 100%; left: 174px; top: 0px }
+.feeds-line { position: absolute; border-right: 1px solid #eee; height: 100%; left: 174px; }
+.feeds-longline { top: 0px }
 /*.loader { background: url("../img/loading-ring.gif") no-repeat; width: 28px; height: 28px; position: absolute; right: -30px; top: -30px }*/
 .FeedList { margin-top: 50px; position: relative; max-width: 820px; overflow: hidden }
 .FeedList.loading { opacity: 0.5; transition: all 1s ease-out }
@@ -65,7 +67,7 @@
 /*.FeedList .feed .body:before { content:''; width: 100%; height: 100%; position: absolute; left: 0; top: 0; background: linear-gradient(transparent 46px, transparent 0px, white 94%) }*/
 .highlight { background-color: #F5E6D4; outline: 2px solid #F5E6D4; }
 
-.welcome { text-align: center; margin-top: 50px; max-width: 1170px }
+.welcome { text-align: center; margin-top: 50px }
 .welcome h1 {
 	font-size: 400%; color: #7C7DBC; margin-top: 20px;
 	background: -webkit-linear-gradient(left, #64E6E3, #965FF9 70%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
@@ -77,7 +79,7 @@
 	background-color: #AF3BFF; display: inline-block; padding: 10px; color: white; margin-top: 10px;
 	background: linear-gradient(45deg, #8041F1, #B149F7); font-weight: lighter; font-size: 18px; line-height: 24px;
 }
-.welcome .sites { padding: 40px 20px; margin-top: 50px; text-align: left }
+.welcome .sites { padding: 40px 20px 0px 20px; margin-top: 50px; text-align: left }
 .welcome .site {
 	width: 32.3%; background-color: #eee; height: 229px; text-align: left; padding: 30px; box-sizing: border-box; font-size: 47px; position: relative;
     color: white; font-weight: 300; border-radius: 2px; box-shadow: 0px 4px 21px -9px #666; display: inline-block; text-decoration: none; margin: 0.5%;
@@ -90,11 +92,12 @@
 	position: absolute; bottom: 17px; right: 20px; font-size: 13px; text-transform: uppercase; transition: all 0.3s;
 	background-color: rgba(255, 255, 255, 0.16); padding: 8px 16px; border-radius: 20px; font-weight: bold;
 }
-.welcome .site-zeroboard { background: radial-gradient(circle at 2.00% -2.01%, hsla(152,31%,51%,1), transparent 100%),radial-gradient(circle at 98.00% 50.04%, hsla(188,44%,51%,1), transparent 100%); }
-.welcome .site-zeroblog { background: linear-gradient(-45deg, #358AC7, #A176B6); }
-.welcome .site-zerotalk { background: linear-gradient(45deg, #9F63BF, #E2556F) }
-.welcome .site-zeromail { background: linear-gradient(-25deg, #C04848 -40%, #4A569D) }
-.welcome .site-zerome { background: linear-gradient(-45deg, #F39963, #F7417D) }
+.welcome .site-bg1 { background: radial-gradient(circle at 2.00% -2.01%, hsla(152,31%,51%,1), transparent 100%),radial-gradient(circle at 98.00% 50.04%, hsla(188,44%,51%,1), transparent 100%); }
+.welcome .site-bg2 { background: linear-gradient(-45deg, #358AC7, #A176B6); }
+.welcome .site-bg3 { background: linear-gradient(45deg, #9F63BF, #E2556F) }
+.welcome .site-bg4 { background: linear-gradient(-25deg, #C04848 -40%, #4A569D) }
+.welcome .site-bg5 { background: linear-gradient(-45deg, #F39963, #F7417D) }
+.welcome .site-bg6 { background: linear-gradient(45deg, #9F63BF, #E2556F) }
 
 @media only screen and (max-width: 1250px) {
 	.welcome .site { width: 49%; }

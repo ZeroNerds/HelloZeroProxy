@@ -1,5 +1,5 @@
 class FeedList extends Class
-	constructor: ->
+	constructor: (@proxy_info) ->
 		@feeds = null
 		@searching = null
 		@searched = null
@@ -14,7 +14,8 @@ class FeedList extends Class
 
 	displayRows: (rows, search) =>
 		@feeds = []
-		if not rows
+
+		if not rows || not rows.sort
 			return false
 
 		rows.sort (a, b) ->
@@ -219,42 +220,23 @@ class FeedList extends Class
 			@log err
 			return h("div")
 
-	renderWelcome: =>
+	renderWelcome: (sites,append) =>
 		h("div.welcome", [
 			h("img", {src: "img/logo.svg", height: 150, onerror: "this.src='img/logo.png'; this.onerror=null;"})
-			h("h1", "Welcome to ZeroNet")
-			h("h2", "Let's build a decentralized Internet together!")
-			h("div.served", ["This site currently served by ", h("b.peers", (Page.site_info["peers"] or "n/a")), " peers, without any central server."])
-			h("div.sites", [
-				h("h3", "Some sites we created:"),
-				h("a.site.site-zeroboard", {href: Text.getSiteUrl("Board.ZeroNetwork.bit")}, [
-					h("div.title", ["ZeroBoard"])
-					h("div.description", ["Simple messaging board"])
-					h("div.visit", ["Activate \u2501"])
-				]),
-				h("a.site.site-zerotalk", {href: Text.getSiteUrl("Talk.ZeroNetwork.bit")}, [
-					h("div.title", ["ZeroTalk"])
-					h("div.description", ["Reddit-like, decentralized forum"])
-					h("div.visit", ["Activate \u2501"])
-				]),
-				h("a.site.site-zeroblog", {href: Text.getSiteUrl("Blog.ZeroNetwork.bit")}, [
-					h("div.title", ["ZeroBlog"])
-					h("div.description", ["Microblogging platform"])
-					h("div.visit", ["Activate \u2501"])
-				]),
-				h("a.site.site-zeromail", {href: Text.getSiteUrl("Mail.ZeroNetwork.bit")}, [
-					h("div.title", ["ZeroMail"])
-					h("div.description", ["End-to-end encrypted mailing"])
-					h("div.visit", ["Activate \u2501"])
-				]),
-				if Page.server_info.rev >= 1400
-					h("a.site.site-zerome", {href: Text.getSiteUrl("Me.ZeroNetwork.bit")}, [
-						h("div.title", ["ZeroMe"])
-						h("div.description", ["P2P social network"])
-						h("div.visit", ["Activate \u2501"])
-					])
+			h("h1", @proxy_info().header)
+			h("div.served", @proxy_info().description),
+			if append
+				append
+			#h("div.served", ["This site currently served by ", h("b.peers", (Page.site_info["peers"] or "n/a")), " peers, without any central server."])
+			if sites and sites.length
+				h("div.sites", [h("h3", "Promoted Sites:")]
+					.concat(sites.map((s) -> h("a.site.site-"+s.bg, {href: Text.getSiteUrl(s.url)}, [
+						h("div.title", [s.title])
+						h("div.description", [s.description])
+						h("div.visit", [s.action])
+					])))
+				)
 			])
-		])
 
 	getClass: =>
 		if @searching != null
@@ -272,10 +254,27 @@ class FeedList extends Class
 
 		h("div#FeedList.FeedContainer", {classes: {faded: Page.mute_list.visible}},
 			if @feeds == null or not Page.site_list.loaded
-				h("div.loading")
-			else if @feeds.length > 0 or @searching != null
-				[
-					h("div.feeds-line"),
+				h("div.spinner-box",h("center",h("div.spinner",[h("div.rect1"),h("div.rect2"),h("div.rect3"),h("div.rect4"),h("div.rect5")])))
+			else
+				if not @feeds.length and @searching == null
+					[@renderWelcome(@proxy_info().sites,
+						h("div.feeds-search-center.feeds-search", {classes: {"searching": @searching}},
+							h("div.icon-magnifier"),
+							if @loading
+								h("div.loader", {enterAnimation: Animation.show, exitAnimation: Animation.hide}, h("div.arc"))
+							h("input", {type: "text", placeholder: "Search in connected sites", value: @searching, onkeyup: @handleSearchKeyup, oninput: @handleSearchInput, afterCreate: @storeNodeSearch}),
+							if @searched and @searched_info and not @loading
+								h("div.search-info",
+									{enterAnimation: Animation.show, exitAnimation: Animation.hide},
+									"#{@searched_info.num} results from #{@searched_info.sites} sites in #{@searched_info.taken.toFixed(2)}s"
+								)
+							if Page.server_info.rev < 1230 and @searching
+								h("div.search-noresult", {enterAnimation: Animation.show}, ["You need to ", h("a", {href: "#Update", onclick: Page.head.handleUpdateZeronetClick}, "update"), " your ZeroNet client to use the search feature!"])
+							else if @feeds.length == 0 and @searched
+								h("div.search-noresult", {enterAnimation: Animation.show}, "No results for #{@searched}")
+						))]
+				else
+					[h("div.feeds-line"),
 					h("div.feeds-search", {classes: {"searching": @searching}},
 						h("div.icon-magnifier"),
 						if @loading
@@ -291,10 +290,7 @@ class FeedList extends Class
 						else if @feeds.length == 0 and @searched
 							h("div.search-noresult", {enterAnimation: Animation.show}, "No results for #{@searched}")
 					),
-					h("div.FeedList."+@getClass(), {classes: {loading: @loading}}, @feeds[0..30].map(@renderFeed))
-				]
-			else
-				@renderWelcome()
+					h("div.FeedList."+@getClass(), {classes: {loading: @loading}}, @feeds[0..30].map(@renderFeed))]
 		)
 
 	onSiteInfo: (site_info) =>

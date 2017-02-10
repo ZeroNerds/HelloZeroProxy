@@ -68,7 +68,11 @@ class Dashboard extends Class
 	handleMultiuserClick: =>
 		@menu_multiuser.items = []
 		@menu_multiuser.items.push ["Show your masterseed", ( -> Page.cmd "userShowMasterSeed" )]
-		@menu_multiuser.items.push ["Logout", ( -> Page.cmd "userLogout" )]
+		@menu_multiuser.items.push ["Login with another Account",( -> Page.cmd "userLoginForm" )]
+		@menu_multiuser.items.push ["Logout", ( ->
+			Page.cmd "wrapperConfirm", ["This will delete your masterseed<br><b>Be sure to have a backup if you need it later</b><br>Are you sure?", "Logout"], =>
+				Page.cmd "userLogout"
+			)]
 
 		@menu_multiuser.toggle()
 		return false
@@ -82,7 +86,6 @@ class Dashboard extends Class
 
 	handleLogoutClick: =>
 		Page.cmd "uiLogout"
-
 	handleNewversionClick: =>
 		@menu_newversion.items = []
 		@menu_newversion.items.push ["Update and restart ZeroNet", ( ->

@@ -1,9 +1,11 @@
 # ZeroHello
 
-Homepage and visited site manager for [ZeroNet](https://github.com/HelloZeroNet/ZeroNet).
+Homepage for ZeroProxies
 
-ZeroNet address: http://127.0.0.1:43110/1HeLLo4uzjaLetFx6NH3PMwFP3qbRbTf3D
+ZeroNet address: http://127.0.0.1:43110/1ProxyQi6h6cy2gGybQECs2WgxnoEP4Cvr
+
+To customize use the [plugin](/plugin)
 
 ## Screenshot
 
-![Screenshot](http://i.imgur.com/H60OAHY.png)
+![Screenshot](/screenshot.png?raw=true)

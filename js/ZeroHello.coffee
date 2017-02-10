@@ -14,6 +14,55 @@ class ZeroHello extends ZeroFrame
 		@latest_version = "0.5.1"
 		@mode = "Sites"
 		@change_timer = null
+		@proxy_info={
+			name:"HelloZeroProxy",
+			header:"Welcome to a ZeroProxy",
+			description:"ZeroProxies are websites which allow you to access ZeroNet Zites just like regular Sites"
+			sites:[
+				{
+					bg:"bg1",
+					url:"Board.ZeroNetwork.bit",
+					title:"ZeroBoard",
+					description:"Simple messaging board",
+					action:"Activate \u2501"
+				},
+				{
+					bg:"bg2",
+					url:"Talk.ZeroNetwork.bit",
+					title:"ZeroTalk",
+					description:"Reddit-like, decentralized forum",
+					action:"Activate \u2501"
+				},
+				{
+					bg:"bg3",
+					url:"Blog.ZeroNetwork.bit",
+					title:"ZeroBlog",
+					description:"Microblogging platform",
+					action:"Activate \u2501"
+				},
+				{
+					bg:"bg4",
+					url:"Mail.ZeroNetwork.bit",
+					title:"ZeroMail",
+					description:"End-to-end encrypted mailing",
+					action:"Activate \u2501"
+				},
+				{
+					bg:"bg5",
+					url:"Me.ZeroNetwork.bit",
+					title:"ZeroMe",
+					description:"P2P social network",
+					action:"Activate \u2501"
+				},
+				{
+					bg:"bg6",
+					url:"donate.bit",
+					title:"Donate",
+					description:"Donate to keep this ZeroProxy alive"
+					action:"Donate \u2501"
+				}
+			]
+		}
 		document.body.id = "Page#{@mode}"
 
 	setProjectorMode: (mode) ->
@@ -52,12 +101,12 @@ class ZeroHello extends ZeroFrame
 		@projector = maquette.createProjector()  # Dummy, will set later
 		@projectors = {}
 
-		@site_list = new SiteList()
-		@feed_list = new FeedList()
-		@file_list = new FileList()
-		@head = new Head()
-		@dashboard = new Dashboard()
-		@mute_list = new MuteList()
+		@site_list = new SiteList(( => return @proxy_info ))
+		@feed_list = new FeedList(( => return @proxy_info ))
+		@file_list = new FileList(( => return @proxy_info ))
+		@head = new Head(( => return @proxy_info ))
+		@dashboard = new Dashboard(( => return @proxy_info ))
+		@mute_list = new MuteList(( => return @proxy_info ))
 
 		@route("")
 

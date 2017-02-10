@@ -1,5 +1,5 @@
 class Head extends Class
-	constructor: ->
+	constructor: (@proxy_info) ->
 		@menu_settings = new Menu()
 
 	formatUpdateInfo: ->
@@ -31,11 +31,6 @@ class Head extends Class
 				]
 		)
 
-	handleCreateSiteClick: =>
-		if Page.server_info.rev < 1770
-			return Page.cmd "wrapperNotification", ["info", "You need to update your ZeroNet client to use this feature"]
-		Page.cmd("siteClone", [Page.site_info.address, "template-new"])
-
 	handleSettingsClick: =>
 		Page.local_storage.sites_orderby ?= "peers"
 		orderby = Page.local_storage.sites_orderby
@@ -50,11 +45,8 @@ class Head extends Class
 		@menu_settings.items.push ["---"]
 		@menu_settings.items.push [@renderMenuLanguage(), null ]
 		@menu_settings.items.push ["---"]
-		@menu_settings.items.push ["Create new, empty site", @handleCreateSiteClick]
-		@menu_settings.items.push ["---"]
 		@menu_settings.items.push [[h("span.emoji", "\uD83D\uDD07 "), "Manage muted users"], @handleManageMutesClick]
 		@menu_settings.items.push ["Version #{Page.server_info.version} (rev#{Page.server_info.rev}): #{@formatUpdateInfo()}", @handleUpdateZeronetClick]
-		@menu_settings.items.push ["Shut down ZeroNet", @handleShutdownZeronetClick]
 
 		if @menu_settings.visible
 			@menu_settings.hide()
@@ -83,10 +75,6 @@ class Head extends Class
 		Page.mute_list.show()
 
 	handleUpdateZeronetClick: =>
-		Page.cmd "wrapperConfirm", ["Update to latest development version?", "Update ZeroNet #{Page.latest_version}"], =>
-			Page.cmd "wrapperNotification", ["info", "Updating to latest version...<br>Please restart ZeroNet manually if it does not come back in the next few minutes.", 8000]
-			Page.cmd "serverUpdate"
-			@log "Updating..."
 		return false
 
 
@@ -107,7 +95,7 @@ class Head extends Class
 			@menu_settings.render()
 			h("a.logo", {href: "?Home"}, [
 				h("img", {src: 'img/logo.svg', width: 40, height: 40, onerror: "this.src='img/logo.png'; this.onerror=null;"}),
-				h("span", ["Hello ZeroNet_"])
+				h("span", [@proxy_info().name+"_"])
 			]),
 			h("div.modes", [
 				h("a.mode.sites", {href: "#Sites", classes: {active: Page.mode == "Sites"}, onclick: @handleModeClick}, _("Sites"))
