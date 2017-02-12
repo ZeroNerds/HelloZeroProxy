@@ -2147,7 +2147,7 @@
           "href": "#Donate",
           onmousedown: this.handleDonateClick,
           onclick: Page.returnFalse
-        }, [h("div.icon-heart")]), this.menu_donate.render(".menu-donate"), Page.server_info.multiuser ? h("a.port.dashboard-item.multiuser", {
+        }, [h("div.icon-heart")]), this.menu_donate.render(".menu-donate"), Page.server_info.multiuser && Page.server_info.master_address ? h("a.port.dashboard-item.multiuser", {
           href: "#Multiuser",
           onmousedown: this.handleMultiuserClick,
           onclick: Page.returnFalse
@@ -2183,7 +2183,6 @@
   window.Dashboard = Dashboard;
 
 }).call(this);
-
 
 
 /* ---- /1ProxyQi6h6cy2gGybQECs2WgxnoEP4Cvr/js/FeedList.coffee ---- */
@@ -2545,7 +2544,12 @@
         classes: {
           faded: Page.mute_list.visible
         }
-      }, this.feeds === null || !Page.site_list.loaded ? h("div.spinner-box", h("center", h("div.spinner", [h("div.rect1"), h("div.rect2"), h("div.rect3"), h("div.rect4"), h("div.rect5")]))) : !this.feeds.length && this.searching === null ? [
+      }, this.proxy_info().show_error ? [
+        this.renderWelcome([], h("div.feeds-search-center-2.feeds-search", h("h3", h("a", {
+          href: "https://github.com/mkg20001/HelloZeroProxy#setup",
+          style: "color: #9760F9"
+        }, ["Setup »"]))))
+      ] : this.feeds === null || !Page.site_list.loaded ? h("div.spinner-box", h("center", h("div.spinner", [h("div.rect1"), h("div.rect2"), h("div.rect3"), h("div.rect4"), h("div.rect5")]))) : !this.feeds.length && this.searching === null ? [
         this.renderWelcome(this.proxy_info().sites, h("div.feeds-search-center.feeds-search", {
           classes: {
             "searching": this.searching
@@ -2957,6 +2961,9 @@
       return Page.cmd("optionalLimitStats", [], (function(_this) {
         return function(res) {
           _this.limit = res.limit;
+          if (!res.limit) {
+            return;
+          }
           if (!_this.limit.endsWith("%")) {
             _this.limit += " GB";
           }
@@ -4254,6 +4261,34 @@
       this.sites_favorited = [];
       this.sites_connected = [];
       this.sites_merged = [];
+      if (!this.sites.length) {
+        this.proxy_info().show_error = true;
+        this.proxy_info().header = "HelloZeroProxy";
+        this.proxy_info().description = "A Homepage for ZeroProxies";
+        this.sites_connected.push({
+          render: (function() {
+            return h("div.site", [
+              [
+                h("div.circle", {
+                  style: "color: red"
+                }, ["\u2022"]), h("a.inner", {
+                  href: "https://github.com/mkg20001/HelloZeroProxy#setup",
+                  title: "test"
+                }, [
+                  h("span", ["You need to set this page as Homepage,", h("br"), "to see the Zites listed here"]), h("div.details", [h("h3", ["\u2501"])]), h("div.message", {
+                    classes: {
+                      visible: this.message_visible,
+                      done: this.message_class === 'done',
+                      error: this.message_class === 'error',
+                      collapsed: this.message_collapsed
+                    }
+                  }, [this.message])
+                ])
+              ]
+            ]);
+          })
+        });
+      }
       ref = this.sites;
       for (i = 0, len = ref.length; i < len; i++) {
         site = ref[i];
@@ -4303,6 +4338,7 @@
   window.SiteList = SiteList;
 
 }).call(this);
+
 
 
 /* ---- /1ProxyQi6h6cy2gGybQECs2WgxnoEP4Cvr/js/ZeroHello.coffee ---- */

@@ -99,6 +99,27 @@ class SiteList extends Class
 		@sites_favorited = []
 		@sites_connected = []
 		@sites_merged = []
+		if not @sites.length #at least one must be in here, if not we dont have permissions
+			@proxy_info().show_error=true
+			@proxy_info().header="HelloZeroProxy"
+			@proxy_info().description="A Homepage for ZeroProxies"
+			@sites_connected.push {render:( ->
+				h("div.site", [
+							[
+								h("div.circle", {style: "color: red"}, ["\u2022"]),
+								h("a.inner", {href: "https://github.com/mkg20001/HelloZeroProxy#setup", title: "test"}, [
+									h("span", ["You need to set this page as Homepage,",h("br"),"to see the Zites listed here"]),
+									h("div.details", [
+										h("h3", ["\u2501"]),
+									])
+									h("div.message",
+										{classes: {visible: @message_visible, done: @message_class == 'done', error: @message_class == 'error', collapsed: @message_collapsed}},
+										[@message]
+									)
+								])
+							]
+				])
+			)}
 		for site in @sites
 			site.proxy_info?=@proxy_info
 			if site.row.settings.size * 1.2 > site.row.size_limit * 1024 * 1024

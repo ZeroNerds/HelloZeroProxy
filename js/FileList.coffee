@@ -184,6 +184,8 @@ class FileList extends Class
 	updateOptionalStats: =>
 		Page.cmd "optionalLimitStats", [], (res) =>
 			@limit = res.limit
+			if not res.limit
+				return
 			if not @limit.endsWith("%")
 				@limit += " GB"
 			@optional_stats = res

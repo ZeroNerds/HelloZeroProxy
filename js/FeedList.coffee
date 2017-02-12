@@ -253,7 +253,12 @@ class FeedList extends Class
 			document.body.className = "loaded"
 
 		h("div#FeedList.FeedContainer", {classes: {faded: Page.mute_list.visible}},
-			if @feeds == null or not Page.site_list.loaded
+			if @proxy_info().show_error
+					[@renderWelcome([],
+						h("div.feeds-search-center-2.feeds-search",
+							h("h3",h("a",{href:"https://github.com/mkg20001/HelloZeroProxy#setup",style:"color: #9760F9"},["Setup »"]))
+						))]
+			else if @feeds == null or not Page.site_list.loaded
 				h("div.spinner-box",h("center",h("div.spinner",[h("div.rect1"),h("div.rect2"),h("div.rect3"),h("div.rect4"),h("div.rect5")])))
 			else
 				if not @feeds.length and @searching == null

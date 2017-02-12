@@ -34,6 +34,7 @@
 .feeds-search input::-ms-clear { display: none }
 .feeds-search input:focus { outline: none; border-color: #A468F4; }
 .feeds-search-center { margin: 0 auto !important; padding: 0 !important; margin-top: 64px !important; }
+.feeds-search-center-2 { margin: 0 auto !important; padding: 0 !important; margin-top: 16px !important; }
 .search-noresult { text-align: center; margin: 100px 50px; font-family: Roboto; font-weight: 100; font-size: 18px; }
 .search-info { right: -29px; color: #AAA; position: absolute; font-size: 13px; margin-top: -28px; }
 .feeds-line { position: absolute; border-right: 1px solid #eee; height: 100%; left: 174px; }

@@ -154,7 +154,7 @@ class Dashboard extends Class
 				@menu_donate.render(".menu-donate")
 
 				# Multiuser
-				if Page.server_info.multiuser
+				if Page.server_info.multiuser and Page.server_info.master_address
 					h("a.port.dashboard-item.multiuser", {href: "#Multiuser", onmousedown: @handleMultiuserClick, onclick: Page.returnFalse}, [
 						h("span", "User: "),
 						h("span.status",
