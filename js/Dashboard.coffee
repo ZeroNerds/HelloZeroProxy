@@ -1,6 +1,7 @@
 class Dashboard extends Class
 	constructor: (proxy_info) ->
 		@proxy_info=proxy_info
+		@menu_proxyowner = new Menu()
 		@menu_newversion = new Menu()
 		@menu_tor = new Menu()
 		@menu_port = new Menu()
@@ -80,7 +81,11 @@ class Dashboard extends Class
 
 	handleDonateClick: =>
 		@menu_donate.items = []
-		@menu_donate.items.push ["Help to keep this project alive", "https://zeronet.readthedocs.org/en/latest/help_zeronet/donate/"]
+		@menu_donate.items.push ["Help to keep the ZeroNet project alive", "https://zeronet.readthedocs.org/en/latest/help_zeronet/donate/"]
+		@menu_donate.items.push ["Donate with Bitcoin: 1QDhxQ6PraUZa21ET5fYUCPgdrwBomnFgX","bitcoin:1QDhxQ6PraUZa21ET5fYUCPgdrwBomnFgX?Label=ZeroNet+donation"]
+		if @proxy_info and @proxy_info().donate
+			@menu_donate.items.push ["Help to keep this ZeroProxy alive"]
+			@menu_donate.items.push ["Donate with "+@proxy_info().donate.type+":\n"+@proxy_info().donate.value.split("?")[0],@getUrl(@proxy_info().donate.type,@proxy_info().donate.value)]
 
 		@menu_donate.toggle()
 		return false
@@ -95,6 +100,25 @@ class Dashboard extends Class
 		)]
 
 		@menu_newversion.toggle()
+		return false
+	getType: (type) =>
+		if type=="mail" or type=="email"
+			return "mailto"
+		if type=="bitmessage"
+			return "bm"
+		return type
+	getUrl: (type_,val) =>
+		type=type_.toLowerCase().replace(/-/g,"")
+		@getType(type)+":"+val
+	handleOwnerClick: =>
+		@menu_proxyowner.items = []
+		if @proxy_info().owner_contact
+			@menu_proxyowner.items.push ["Contact via "+@proxy_info().owner_contact.type+": "+@proxy_info().owner_contact.value.split("?")[0],@getUrl(@proxy_info().owner_contact.type,@proxy_info().owner_contact.value)]
+		if @proxy_info().donate
+			@menu_proxyowner.items.push ["Donate with "+@proxy_info().donate.type+": "+@proxy_info().donate.value.split("?")[0],@getUrl(@proxy_info().donate.type,@proxy_info().donate.value)]
+
+		if @menu_proxyowner.items.length
+			@menu_proxyowner.toggle()
 		return false
 
 	handleBrowserwarningClick: =>
@@ -113,6 +137,12 @@ class Dashboard extends Class
 						h("span", "Unsupported browser")
 					])
 				@menu_browserwarning.render(".menu-browserwarning")
+
+				if @proxy_info and @proxy_info().owner
+					h("a.newversion.dashboard-item", {href: "#Owner", onmousedown: @handleOwnerClick, onclick: Page.returnFalse}, "Proxy Owner: #{@proxy_info().owner}")
+				else if @proxy_info
+					h("a.newversion.dashboard-item", {href: "https://github.com/mkg20001/HelloZeroProxy#setup"}, "Use this as your proxy's homepage")
+				@menu_proxyowner.render(".menu-newversion")
 
 				# Update
 				if parseFloat(Page.server_info.version.replace(".", "0")) < parseFloat(Page.latest_version.replace(".", "0")) and @proxy_info and @proxy_info().admin

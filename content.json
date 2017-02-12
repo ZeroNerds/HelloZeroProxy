@@ -36,8 +36,8 @@
    "size": 1095
   },
   "js/all.js": {
-   "sha512": "4b2a715b125c14f47583d2c4b83c62a172935776e83aeaef7eb7ab637402dc5d",
-   "size": 183996
+   "sha512": "72b7b4978c12f9a9faa61ca6fa64bd1b32c00f740573dc41355227292c464c6b",
+   "size": 186378
   },
   "languages/da.json": {
    "sha512": "a11d1da29b791c2de8a926d5c9177011dc00ab569a2b1fc8b435e5615658827f",
@@ -88,29 +88,29 @@
    "size": 6703
   },
   "plugin/HelloZeroProxyPlugin.py": {
-   "sha512": "8b3e8abbea671ff019383b00423555958e2a1e4385d9ad7282cc094130317aef",
-   "size": 383
+   "sha512": "7785e7d3d2be60fc42cdc1559348a133d698c4f8cc28dbb3a25537bb4a17acc8",
+   "size": 579
   },
   "plugin/__init__.py": {
    "sha512": "4c75627cec6cb0bb686713cf523d5c942c2709cb802760dfebdde3e3c3f06a08",
    "size": 28
   },
   "plugin/config.json": {
-   "sha512": "07e6bf8c22a29500625a9925fdc9ef305ea706dcf46b7277503f3194020d724f",
-   "size": 1345
+   "sha512": "757ed106092f26ec2e606b20fb09103dff1ce565047f707f677ce71dfd7ccce5",
+   "size": 1518
   }
  },
  "ignore": "(?=^.git|^screenshot|(js|css)/(?!all.(js|css)))",
  "inner_path": "content.json",
- "modified": 1486894155,
+ "modified": 1486896576,
  "postmessage_nonce_security": true,
  "sign": [
-  107446594743684596623729192506233740216268728963973438622331119808240766101394,
-  39245695503776754980431456426397656761293657999992356096297113650713582840138
+  30628931787023558736662474413309864231775472336564382105812792478899891851924,
+  103001143055984501445159925101594681833092453869601699563334328690515209178587
  ],
  "signers_sign": "G8M370tmABI2znztuFlPL8S7U91CQu827GrngGtpGnREQWS8sbpV2r9lrREMvNEFZzvz9gWiU/aXbxTQtZaq4r4=",
  "signs": {
-  "1ProxyQi6h6cy2gGybQECs2WgxnoEP4Cvr": "G3QevBAKLj7X7lf18+sx9ZNjUSz/Xum/7sWnpeiIR+0hzLDZAQ0Z6i7V0yCOPlOjh4LIK/2ageW7yef1zBnpEW8="
+  "1ProxyQi6h6cy2gGybQECs2WgxnoEP4Cvr": "G557TR2CyyDPB9dosCIsvBT3XPwQHeoQTZYUyHzAuqPQYrPxkDUXu3Y81PJ07jSC8OeJVKsamo/IZmkmrQjUzSs="
  },
  "signs_required": 1,
  "title": "ZeroProxy",

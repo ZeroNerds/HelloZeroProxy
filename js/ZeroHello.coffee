@@ -21,6 +21,15 @@ class ZeroHello extends ZeroFrame
 				updateAll:true,
 				checkFiles:true
 			},
+			#owner:"nobody",
+			#owner_contact:{
+			#	type:"email",
+			#	value:"nobody@example.com"
+			#},
+			#donate:{
+			#	type:"Bitcoin",
+			#	value:"1SomeAddress"
+			#}
 			admin:false,
 			header:"Welcome to a ZeroProxy",
 			description:"ZeroProxies are websites which allow you to access ZeroNet Zites just like regular Sites",
@@ -196,14 +205,14 @@ class ZeroHello extends ZeroFrame
 		@on_site_info.resolve()
 
 	setServerInfo: (server_info) ->
-		console.log(server_info)
 		@server_info = server_info
 		if server_info.HelloZeroProxy
-			@proxy_info=server_info.HelloZeroProxy
-		if server_info.multiuser and server_info.master_address
-			@proxy_info.admin=true
-		else if not server_info.multiuser
-			@proxy_info.admin=true
+			@proxy_info=server_info.HelloZeroProxy #the HelloZeroProxy plugin sets the admin value
+		else
+			if server_info.multiuser and server_info.master_address
+				@proxy_info.admin=true
+			else if not server_info.multiuser
+				@proxy_info.admin=true
 		@projector.scheduleRender()
 
 	# Simple return false to avoid link clicks

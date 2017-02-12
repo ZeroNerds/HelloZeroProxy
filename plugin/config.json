@@ -1,5 +1,14 @@
 {
   "name": "ZeroProxy",
+  "owner": "[Owner]",
+  "owner_contact": {
+    "type": "email",
+    "value": "nobody@example.com"
+  },
+  "donate": {
+    "type": "Bitcoin",
+    "value": "1YourAddress"
+  },
   "show": {
     "update": true,
     "updateAll": false,

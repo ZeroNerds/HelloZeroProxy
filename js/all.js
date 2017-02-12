@@ -1934,6 +1934,9 @@
     function Dashboard(proxy_info) {
       this.render = bind(this.render, this);
       this.handleBrowserwarningClick = bind(this.handleBrowserwarningClick, this);
+      this.handleOwnerClick = bind(this.handleOwnerClick, this);
+      this.getUrl = bind(this.getUrl, this);
+      this.getType = bind(this.getType, this);
       this.handleNewversionClick = bind(this.handleNewversionClick, this);
       this.handleLogoutClick = bind(this.handleLogoutClick, this);
       this.handleDonateClick = bind(this.handleDonateClick, this);
@@ -1944,6 +1947,7 @@
       this.handleEnableAlwaysTorClick = bind(this.handleEnableAlwaysTorClick, this);
       this.handleTorClick = bind(this.handleTorClick, this);
       this.proxy_info = proxy_info;
+      this.menu_proxyowner = new Menu();
       this.menu_newversion = new Menu();
       this.menu_tor = new Menu();
       this.menu_port = new Menu();
@@ -2058,7 +2062,12 @@
 
     Dashboard.prototype.handleDonateClick = function() {
       this.menu_donate.items = [];
-      this.menu_donate.items.push(["Help to keep this project alive", "https://zeronet.readthedocs.org/en/latest/help_zeronet/donate/"]);
+      this.menu_donate.items.push(["Help to keep the ZeroNet project alive", "https://zeronet.readthedocs.org/en/latest/help_zeronet/donate/"]);
+      this.menu_donate.items.push(["Donate with Bitcoin: 1QDhxQ6PraUZa21ET5fYUCPgdrwBomnFgX", "bitcoin:1QDhxQ6PraUZa21ET5fYUCPgdrwBomnFgX?Label=ZeroNet+donation"]);
+      if (this.proxy_info && this.proxy_info().donate) {
+        this.menu_donate.items.push(["Help to keep this ZeroProxy alive"]);
+        this.menu_donate.items.push(["Donate with " + this.proxy_info().donate.type + ":\n" + this.proxy_info().donate.value.split("?")[0], this.getUrl(this.proxy_info().donate.type, this.proxy_info().donate.value)]);
+      }
       this.menu_donate.toggle();
       return false;
     };
@@ -2079,6 +2088,36 @@
       return false;
     };
 
+    Dashboard.prototype.getType = function(type) {
+      if (type === "mail" || type === "email") {
+        return "mailto";
+      }
+      if (type === "bitmessage") {
+        return "bm";
+      }
+      return type;
+    };
+
+    Dashboard.prototype.getUrl = function(type_, val) {
+      var type;
+      type = type_.toLowerCase().replace(/-/g, "");
+      return this.getType(type) + ":" + val;
+    };
+
+    Dashboard.prototype.handleOwnerClick = function() {
+      this.menu_proxyowner.items = [];
+      if (this.proxy_info().owner_contact) {
+        this.menu_proxyowner.items.push(["Contact via " + this.proxy_info().owner_contact.type + ": " + this.proxy_info().owner_contact.value.split("?")[0], this.getUrl(this.proxy_info().owner_contact.type, this.proxy_info().owner_contact.value)]);
+      }
+      if (this.proxy_info().donate) {
+        this.menu_proxyowner.items.push(["Donate with " + this.proxy_info().donate.type + ": " + this.proxy_info().donate.value.split("?")[0], this.getUrl(this.proxy_info().donate.type, this.proxy_info().donate.value)]);
+      }
+      if (this.menu_proxyowner.items.length) {
+        this.menu_proxyowner.toggle();
+      }
+      return false;
+    };
+
     Dashboard.prototype.handleBrowserwarningClick = function() {
       this.menu_browserwarning.items = [];
       this.menu_browserwarning.items.push(["Internet Explorer is not fully supported browser by ZeroNet, please consider switching to Chrome or Firefox", "http://browsehappy.com/"]);
@@ -2094,7 +2133,13 @@
           href: "http://browsehappy.com/",
           onmousedown: this.handleBrowserwarningClick,
           onclick: Page.returnFalse
-        }, [h("span", "Unsupported browser")]) : void 0, this.menu_browserwarning.render(".menu-browserwarning"), parseFloat(Page.server_info.version.replace(".", "0")) < parseFloat(Page.latest_version.replace(".", "0")) && this.proxy_info && this.proxy_info().admin ? h("a.newversion.dashboard-item", {
+        }, [h("span", "Unsupported browser")]) : void 0, this.menu_browserwarning.render(".menu-browserwarning"), this.proxy_info && this.proxy_info().owner ? h("a.newversion.dashboard-item", {
+          href: "#Owner",
+          onmousedown: this.handleOwnerClick,
+          onclick: Page.returnFalse
+        }, "Proxy Owner: " + (this.proxy_info().owner)) : this.proxy_info ? h("a.newversion.dashboard-item", {
+          href: "https://github.com/mkg20001/HelloZeroProxy#setup"
+        }, "Use this as your proxy's homepage") : void 0, this.menu_proxyowner.render(".menu-newversion"), parseFloat(Page.server_info.version.replace(".", "0")) < parseFloat(Page.latest_version.replace(".", "0")) && this.proxy_info && this.proxy_info().admin ? h("a.newversion.dashboard-item", {
           href: "#Update",
           onmousedown: this.handleNewversionClick,
           onclick: Page.returnFalse
@@ -2138,6 +2183,7 @@
   window.Dashboard = Dashboard;
 
 }).call(this);
+
 
 
 /* ---- /1ProxyQi6h6cy2gGybQECs2WgxnoEP4Cvr/js/FeedList.coffee ---- */
@@ -4532,15 +4578,15 @@
     };
 
     ZeroHello.prototype.setServerInfo = function(server_info) {
-      console.log(server_info);
       this.server_info = server_info;
       if (server_info.HelloZeroProxy) {
         this.proxy_info = server_info.HelloZeroProxy;
-      }
-      if (server_info.multiuser && server_info.master_address) {
-        this.proxy_info.admin = true;
-      } else if (!server_info.multiuser) {
-        this.proxy_info.admin = true;
+      } else {
+        if (server_info.multiuser && server_info.master_address) {
+          this.proxy_info.admin = true;
+        } else if (!server_info.multiuser) {
+          this.proxy_info.admin = true;
+        }
       }
       return this.projector.scheduleRender();
     };
