@@ -1,0 +1,55 @@
+{
+  "name": "ZeroProxy",
+  "show": {
+    "update": true,
+    "updateAll": false,
+    "checkFiles": true
+  },
+  "admin": false,
+  "header": "Welcome to a ZeroProxy",
+  "description": "ZeroProxies are websites which allow you to access ZeroNet Zites just like regular Sites",
+  "sites": [
+    {
+      "bg": "bg1",
+      "url": "Board.ZeroNetwork.bit",
+      "title": "ZeroBoard",
+      "description": "Simple messaging board",
+      "action": "Activate ━"
+    },
+    {
+      "bg": "bg2",
+      "url": "Talk.ZeroNetwork.bit",
+      "title": "ZeroTalk",
+      "description": "Reddit-like, decentralized forum",
+      "action": "Activate ━"
+    },
+    {
+      "bg": "bg3",
+      "url": "Blog.ZeroNetwork.bit",
+      "title": "ZeroBlog",
+      "description": "Microblogging platform",
+      "action": "Activate ━"
+    },
+    {
+      "bg": "bg4",
+      "url": "Mail.ZeroNetwork.bit",
+      "title": "ZeroMail",
+      "description": "End-to-end encrypted mailing",
+      "action": "Activate ━"
+    },
+    {
+      "bg": "bg5",
+      "url": "Me.ZeroNetwork.bit",
+      "title": "ZeroMe",
+      "description": "P2P social network",
+      "action": "Activate ━"
+    },
+    {
+      "bg": "bg6",
+      "url": "donate.bit",
+      "title": "Donate",
+      "description": "Donate to keep this ZeroProxy alive",
+      "action": "Donate ━"
+    }
+  ]
+}

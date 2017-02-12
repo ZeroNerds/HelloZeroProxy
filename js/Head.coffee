@@ -36,8 +36,9 @@ class Head extends Class
 		orderby = Page.local_storage.sites_orderby
 
 		@menu_settings.items = []
-		@menu_settings.items.push ["Update all sites", @handleUpdateAllClick]
-		@menu_settings.items.push ["---"]
+		if @proxy_info and @proxy_info().show.updateAll
+			@menu_settings.items.push ["Update all sites", @handleUpdateAllClick]
+			@menu_settings.items.push ["---"]
 		@menu_settings.items.push ["Order sites by peers", ( => @handleOrderbyClick("peers") ), (orderby == "peers")]
 		@menu_settings.items.push ["Order sites by update time", ( => @handleOrderbyClick("modified") ), (orderby == "modified")]
 		@menu_settings.items.push ["Order sites by add time", ( => @handleOrderbyClick("addtime") ), (orderby == "addtime")]
@@ -46,7 +47,12 @@ class Head extends Class
 		@menu_settings.items.push [@renderMenuLanguage(), null ]
 		@menu_settings.items.push ["---"]
 		@menu_settings.items.push [[h("span.emoji", "\uD83D\uDD07 "), "Manage muted users"], @handleManageMutesClick]
-		@menu_settings.items.push ["Version #{Page.server_info.version} (rev#{Page.server_info.rev}): #{@formatUpdateInfo()}", @handleUpdateZeronetClick]
+		if @proxy_info and @proxy_info().admin
+			@menu_settings.items.push ["Version #{Page.server_info.version} (rev#{Page.server_info.rev}): #{@formatUpdateInfo()}", @handleUpdateZeronetClick]
+			@menu_settings.items.push ["Shut down ZeroNet", @handleShutdownZeronetClick]
+		else
+			@menu_settings.items.push ["Version #{Page.server_info.version} (rev#{Page.server_info.rev})"]
+
 
 		if @menu_settings.visible
 			@menu_settings.hide()

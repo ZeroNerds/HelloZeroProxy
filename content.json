@@ -8,8 +8,8 @@
    "size": 18027
   },
   "README.md": {
-   "sha512": "b68b43eaeb45812d40b3ce86f4217b4fbf7d35db279168310841cfef287c3c73",
-   "size": 210
+   "sha512": "64fa8c2bcb601b153087e9c9bdc4a2526d84272e8696946afee42dfec4e9974e",
+   "size": 550
   },
   "css/all.css": {
    "sha512": "cf8178843139b7b867b8c7159fda573dd9816f534ff7f8947c6a1624e8674c58",
@@ -36,8 +36,8 @@
    "size": 1095
   },
   "js/all.js": {
-   "sha512": "f9ba2879f8c76e97dac72507c8aeb55f34b732f55093772ca987666b9433d60b",
-   "size": 182753
+   "sha512": "4b2a715b125c14f47583d2c4b83c62a172935776e83aeaef7eb7ab637402dc5d",
+   "size": 183996
   },
   "languages/da.json": {
    "sha512": "a11d1da29b791c2de8a926d5c9177011dc00ab569a2b1fc8b435e5615658827f",
@@ -56,8 +56,8 @@
    "size": 4454
   },
   "languages/it.json": {
-   "sha512": "dbd5b2244baa61b2ec0b0738152ee7ad7a88833a2110f4752fbf2768c0b0c9e5",
-   "size": 4266
+   "sha512": "d60cd479712d4a18d9ddab7775a5592f6295610d697f8d1df2523f081a27ea61",
+   "size": 4667
   },
   "languages/pl.json": {
    "sha512": "7af9a32eb1cc223b3065fff2591c99a44f33a38fd035c75737108ffb524e62b8",
@@ -86,19 +86,31 @@
   "languages/zh.json": {
    "sha512": "0ae8478c70a90d9e88540649d6b4aab1f622cb63ceb9653e9808abf85beed538",
    "size": 6703
+  },
+  "plugin/HelloZeroProxyPlugin.py": {
+   "sha512": "8b3e8abbea671ff019383b00423555958e2a1e4385d9ad7282cc094130317aef",
+   "size": 383
+  },
+  "plugin/__init__.py": {
+   "sha512": "4c75627cec6cb0bb686713cf523d5c942c2709cb802760dfebdde3e3c3f06a08",
+   "size": 28
+  },
+  "plugin/config.json": {
+   "sha512": "07e6bf8c22a29500625a9925fdc9ef305ea706dcf46b7277503f3194020d724f",
+   "size": 1345
   }
  },
- "ignore": "(?=^.git|^screenshot|^plugin|(js|css)/(?!all.(js|css)))",
+ "ignore": "(?=^.git|^screenshot|(js|css)/(?!all.(js|css)))",
  "inner_path": "content.json",
- "modified": 1486756019,
+ "modified": 1486894155,
  "postmessage_nonce_security": true,
  "sign": [
-  48435986471946106606321462491563520118556539816508230795824357396426714991996,
-  49257005892508275680086593776257932915755285016790053147451942841650083742873
+  107446594743684596623729192506233740216268728963973438622331119808240766101394,
+  39245695503776754980431456426397656761293657999992356096297113650713582840138
  ],
  "signers_sign": "G8M370tmABI2znztuFlPL8S7U91CQu827GrngGtpGnREQWS8sbpV2r9lrREMvNEFZzvz9gWiU/aXbxTQtZaq4r4=",
  "signs": {
-  "1ProxyQi6h6cy2gGybQECs2WgxnoEP4Cvr": "G0S+gJRnV4sx3IHut51qATLVtAaSB0Pzi7rwM/keTCyUBYau2o1/7Ga75NXxFssauwqnlBYxh0bMy8AaL1UGB1k="
+  "1ProxyQi6h6cy2gGybQECs2WgxnoEP4Cvr": "G3QevBAKLj7X7lf18+sx9ZNjUSz/Xum/7sWnpeiIR+0hzLDZAQ0Z6i7V0yCOPlOjh4LIK/2ageW7yef1zBnpEW8="
  },
  "signs_required": 1,
  "title": "ZeroProxy",

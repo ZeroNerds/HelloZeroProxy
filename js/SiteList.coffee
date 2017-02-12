@@ -1,5 +1,6 @@
 class SiteList extends Class
-	constructor: ->
+	constructor: (proxy_info) ->
+		@proxy_info=proxy_info
 		@item_list = new ItemList(Site, "address")
 		@sites = @item_list.items
 		@sites_byaddress = @item_list.items_bykey
@@ -99,6 +100,7 @@ class SiteList extends Class
 		@sites_connected = []
 		@sites_merged = []
 		for site in @sites
+			site.proxy_info?=@proxy_info
 			if site.row.settings.size * 1.2 > site.row.size_limit * 1024 * 1024
 				@sites_needaction.push site
 			else if site.favorite

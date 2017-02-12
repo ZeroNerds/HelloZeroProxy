@@ -121,16 +121,19 @@ class Site extends Class
 			@menu.items.push ["Unfavorite", @handleUnfavoriteClick]
 		else
 			@menu.items.push ["Favorite", @handleFavoriteClick]
-		@menu.items.push ["Update", @handleUpdateClick]
+		if @proxy_info and @proxy_info().show.update
+			@menu.items.push ["Update", @handleUpdateClick]
 		@menu.items.push ["Check files", @handleCheckfilesClick]
 		if @row.settings.serving
 			@menu.items.push ["Pause", @handlePauseClick]
 		else
 			@menu.items.push ["Resume", @handleResumeClick]
-		if @row.content.cloneable == true
+		if @proxy_info and @proxy_info().admin and @row.content.cloneable == true
 			@menu.items.push ["Clone", @handleCloneClick]
-		@menu.items.push ["---"]
-		@menu.items.push ["Delete", @handleDeleteClick]
+		if @proxy_info and @proxy_info().admin
+			@menu.items.push ["---"]
+			@menu.items.push ["Delete", @handleDeleteClick]
+
 
 		if @menu.visible
 			@menu.hide()

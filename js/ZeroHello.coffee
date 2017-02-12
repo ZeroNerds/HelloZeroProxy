@@ -11,13 +11,19 @@ class ZeroHello extends ZeroFrame
 		@on_local_storage = new Promise()
 		@local_storage = null
 
-		@latest_version = "0.5.1"
+		@latest_version = "0.5.2"
 		@mode = "Sites"
 		@change_timer = null
 		@proxy_info={
 			name:"HelloZeroProxy",
+			show:{
+				update:true,
+				updateAll:true,
+				checkFiles:true
+			},
+			admin:false,
 			header:"Welcome to a ZeroProxy",
-			description:"ZeroProxies are websites which allow you to access ZeroNet Zites just like regular Sites"
+			description:"ZeroProxies are websites which allow you to access ZeroNet Zites just like regular Sites",
 			sites:[
 				{
 					bg:"bg1",
@@ -58,7 +64,7 @@ class ZeroHello extends ZeroFrame
 					bg:"bg6",
 					url:"donate.bit",
 					title:"Donate",
-					description:"Donate to keep this ZeroProxy alive"
+					description:"Donate to keep this ZeroProxy alive",
 					action:"Donate \u2501"
 				}
 			]
@@ -190,7 +196,14 @@ class ZeroHello extends ZeroFrame
 		@on_site_info.resolve()
 
 	setServerInfo: (server_info) ->
+		console.log(server_info)
 		@server_info = server_info
+		if server_info.HelloZeroProxy
+			@proxy_info=server_info.HelloZeroProxy
+		if server_info.multiuser and server_info.master_address
+			@proxy_info.admin=true
+		else if not server_info.multiuser
+			@proxy_info.admin=true
 		@projector.scheduleRender()
 
 	# Simple return false to avoid link clicks

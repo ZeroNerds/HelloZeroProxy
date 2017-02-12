@@ -1931,7 +1931,7 @@
   Dashboard = (function(superClass) {
     extend(Dashboard, superClass);
 
-    function Dashboard() {
+    function Dashboard(proxy_info) {
       this.render = bind(this.render, this);
       this.handleBrowserwarningClick = bind(this.handleBrowserwarningClick, this);
       this.handleNewversionClick = bind(this.handleNewversionClick, this);
@@ -1943,6 +1943,7 @@
       this.handleDisableAlwaysTorClick = bind(this.handleDisableAlwaysTorClick, this);
       this.handleEnableAlwaysTorClick = bind(this.handleEnableAlwaysTorClick, this);
       this.handleTorClick = bind(this.handleTorClick, this);
+      this.proxy_info = proxy_info;
       this.menu_newversion = new Menu();
       this.menu_tor = new Menu();
       this.menu_port = new Menu();
@@ -2093,7 +2094,7 @@
           href: "http://browsehappy.com/",
           onmousedown: this.handleBrowserwarningClick,
           onclick: Page.returnFalse
-        }, [h("span", "Unsupported browser")]) : void 0, this.menu_browserwarning.render(".menu-browserwarning"), parseFloat(Page.server_info.version.replace(".", "0")) < parseFloat(Page.latest_version.replace(".", "0")) ? h("a.newversion.dashboard-item", {
+        }, [h("span", "Unsupported browser")]) : void 0, this.menu_browserwarning.render(".menu-browserwarning"), parseFloat(Page.server_info.version.replace(".", "0")) < parseFloat(Page.latest_version.replace(".", "0")) && this.proxy_info && this.proxy_info().admin ? h("a.newversion.dashboard-item", {
           href: "#Update",
           onmousedown: this.handleNewversionClick,
           onclick: Page.returnFalse
@@ -3118,8 +3119,10 @@
       }
       orderby = Page.local_storage.sites_orderby;
       this.menu_settings.items = [];
-      this.menu_settings.items.push(["Update all sites", this.handleUpdateAllClick]);
-      this.menu_settings.items.push(["---"]);
+      if (this.proxy_info && this.proxy_info().show.updateAll) {
+        this.menu_settings.items.push(["Update all sites", this.handleUpdateAllClick]);
+        this.menu_settings.items.push(["---"]);
+      }
       this.menu_settings.items.push([
         "Order sites by peers", ((function(_this) {
           return function() {
@@ -3152,7 +3155,12 @@
       this.menu_settings.items.push([this.renderMenuLanguage(), null]);
       this.menu_settings.items.push(["---"]);
       this.menu_settings.items.push([[h("span.emoji", "\uD83D\uDD07 "), "Manage muted users"], this.handleManageMutesClick]);
-      this.menu_settings.items.push(["Version " + Page.server_info.version + " (rev" + Page.server_info.rev + "): " + (this.formatUpdateInfo()), this.handleUpdateZeronetClick]);
+      if (this.proxy_info && this.proxy_info().admin) {
+        this.menu_settings.items.push(["Version " + Page.server_info.version + " (rev" + Page.server_info.rev + "): " + (this.formatUpdateInfo()), this.handleUpdateZeronetClick]);
+        this.menu_settings.items.push(["Shut down ZeroNet", this.handleShutdownZeronetClick]);
+      } else {
+        this.menu_settings.items.push(["Version " + Page.server_info.version + " (rev" + Page.server_info.rev + ")"]);
+      }
       if (this.menu_settings.visible) {
         this.menu_settings.hide();
       } else {
@@ -3586,18 +3594,22 @@
       } else {
         this.menu.items.push(["Favorite", this.handleFavoriteClick]);
       }
-      this.menu.items.push(["Update", this.handleUpdateClick]);
+      if (this.proxy_info && this.proxy_info().show.update) {
+        this.menu.items.push(["Update", this.handleUpdateClick]);
+      }
       this.menu.items.push(["Check files", this.handleCheckfilesClick]);
       if (this.row.settings.serving) {
         this.menu.items.push(["Pause", this.handlePauseClick]);
       } else {
         this.menu.items.push(["Resume", this.handleResumeClick]);
       }
-      if (this.row.content.cloneable === true) {
+      if (this.proxy_info && this.proxy_info().admin && this.row.content.cloneable === true) {
         this.menu.items.push(["Clone", this.handleCloneClick]);
       }
-      this.menu.items.push(["---"]);
-      this.menu.items.push(["Delete", this.handleDeleteClick]);
+      if (this.proxy_info && this.proxy_info().admin) {
+        this.menu.items.push(["---"]);
+        this.menu.items.push(["Delete", this.handleDeleteClick]);
+      }
       if (this.menu.visible) {
         this.menu.hide();
       } else {
@@ -4004,13 +4016,14 @@
   SiteList = (function(superClass) {
     extend(SiteList, superClass);
 
-    function SiteList() {
+    function SiteList(proxy_info) {
       this.onSiteInfo = bind(this.onSiteInfo, this);
       this.render = bind(this.render, this);
       this.renderMergedSites = bind(this.renderMergedSites, this);
       this.reorder = bind(this.reorder, this);
       this.sortRows = bind(this.sortRows, this);
       this.reorderTimer = bind(this.reorderTimer, this);
+      this.proxy_info = proxy_info;
       this.item_list = new ItemList(Site, "address");
       this.sites = this.item_list.items;
       this.sites_byaddress = this.item_list.items_bykey;
@@ -4198,6 +4211,9 @@
       ref = this.sites;
       for (i = 0, len = ref.length; i < len; i++) {
         site = ref[i];
+        if (site.proxy_info == null) {
+          site.proxy_info = this.proxy_info;
+        }
         if (site.row.settings.size * 1.2 > site.row.size_limit * 1024 * 1024) {
           this.sites_needaction.push(site);
         } else if (site.favorite) {
@@ -4272,11 +4288,17 @@
       this.on_site_info = new Promise();
       this.on_local_storage = new Promise();
       this.local_storage = null;
-      this.latest_version = "0.5.1";
+      this.latest_version = "0.5.2";
       this.mode = "Sites";
       this.change_timer = null;
       this.proxy_info = {
         name: "HelloZeroProxy",
+        show: {
+          update: true,
+          updateAll: true,
+          checkFiles: true
+        },
+        admin: false,
         header: "Welcome to a ZeroProxy",
         description: "ZeroProxies are websites which allow you to access ZeroNet Zites just like regular Sites",
         sites: [
@@ -4510,7 +4532,16 @@
     };
 
     ZeroHello.prototype.setServerInfo = function(server_info) {
+      console.log(server_info);
       this.server_info = server_info;
+      if (server_info.HelloZeroProxy) {
+        this.proxy_info = server_info.HelloZeroProxy;
+      }
+      if (server_info.multiuser && server_info.master_address) {
+        this.proxy_info.admin = true;
+      } else if (!server_info.multiuser) {
+        this.proxy_info.admin = true;
+      }
       return this.projector.scheduleRender();
     };
 

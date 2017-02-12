@@ -1,5 +1,6 @@
 class Dashboard extends Class
-	constructor: ->
+	constructor: (proxy_info) ->
+		@proxy_info=proxy_info
 		@menu_newversion = new Menu()
 		@menu_tor = new Menu()
 		@menu_port = new Menu()
@@ -114,7 +115,7 @@ class Dashboard extends Class
 				@menu_browserwarning.render(".menu-browserwarning")
 
 				# Update
-				if parseFloat(Page.server_info.version.replace(".", "0")) < parseFloat(Page.latest_version.replace(".", "0"))
+				if parseFloat(Page.server_info.version.replace(".", "0")) < parseFloat(Page.latest_version.replace(".", "0")) and @proxy_info and @proxy_info().admin
 					h("a.newversion.dashboard-item", {href: "#Update", onmousedown: @handleNewversionClick, onclick: Page.returnFalse}, "New ZeroNet version: #{Page.latest_version}")
 				@menu_newversion.render(".menu-newversion")
 
