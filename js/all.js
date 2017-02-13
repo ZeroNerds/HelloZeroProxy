@@ -2185,7 +2185,6 @@
 }).call(this);
 
 
-
 /* ---- /1ProxyQi6h6cy2gGybQECs2WgxnoEP4Cvr/js/FeedList.coffee ---- */
 
 
@@ -2261,6 +2260,9 @@
     };
 
     FeedList.prototype.checkScroll = function() {
+      if (!this.feeds.length && this.searching === null) {
+        return;
+      }
       if (Page.mode !== "Sites" && !this.changed_back) {
         this.limit = 30;
         this.query_limit = 20;
@@ -2707,6 +2709,7 @@
   window.FeedList = FeedList;
 
 }).call(this);
+
 
 
 /* ---- /1ProxyQi6h6cy2gGybQECs2WgxnoEP4Cvr/js/FileList.coffee ---- */

@@ -29,6 +29,8 @@ class FeedList extends Class
 					_.checkScroll()
 
 	checkScroll: =>
+		if not @feeds.length and @searching == null
+			return
 		if Page.mode!="Sites" and not @changed_back
 			@limit = 30
 			@query_limit = 20

@@ -190,7 +190,7 @@ class ZeroHello extends ZeroFrame
 		for i in [1...10] by 1
 			setTimeout ( ->
 				Page.projector.scheduleRender()
-			), i*1000
+			), i*1000 # 500*(i/5)+i*100
 
 	reloadSiteInfo: =>
 		@cmd "siteInfo", {}, (site_info) =>
