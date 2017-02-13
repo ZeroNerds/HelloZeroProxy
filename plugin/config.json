@@ -16,7 +16,11 @@
   },
   "admin": false,
   "header": "Welcome to a ZeroProxy",
-  "description": "ZeroProxies are websites which allow you to access ZeroNet Zites just like regular Sites",
+  "description": [
+    "ZeroProxies are websites which allow you to access ZeroNet Zites just like regular Sites",
+    "     —     ",
+    "Disclaimer: No content here is served by us nor are we associated with it in any way"
+  ],
   "sites": [
     {
       "bg": "bg1",

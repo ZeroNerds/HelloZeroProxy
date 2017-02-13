@@ -2511,15 +2511,31 @@
     };
 
     FeedList.prototype.renderWelcome = function(sites, append) {
+      var br;
+      br = function(ar) {
+        if (!Array.isArray(ar)) {
+          return [ar];
+        }
+        return ar.reduce(((function(_this) {
+          return function(a, b) {
+            if (a.length) {
+              a.push(h("br"), b);
+            } else {
+              a.push(b);
+            }
+            return a;
+          };
+        })(this)), []);
+      };
       return h("div.welcome", [
         h("img", {
           src: "img/logo.svg",
           height: 150,
           onerror: "this.src='img/logo.png'; this.onerror=null;"
-        }), h("h1", this.proxy_info().header), h("div.served", this.proxy_info().description), append ? append : void 0, sites && sites.length ? h("div.sites", [h("h3", "Promoted Sites:")].concat(sites.map(function(s) {
+        }), h("h1", br(this.proxy_info().header)), h("div.served", br(this.proxy_info().description)), append ? append : void 0, sites && sites.length ? h("div.sites", [h("h3", "Promoted Sites:")].concat(sites.map(function(s) {
           return h("a.site.site-" + s.bg, {
             href: Text.getSiteUrl(s.url)
-          }, [h("div.title", [s.title]), h("div.description", [s.description]), h("div.visit", [s.action])]);
+          }, [h("div.title", [s.title]), h("div.description", br(s.description)), h("div.visit", [s.action])]);
         }))) : void 0
       ]);
     };
@@ -4340,7 +4356,6 @@
 }).call(this);
 
 
-
 /* ---- /1ProxyQi6h6cy2gGybQECs2WgxnoEP4Cvr/js/ZeroHello.coffee ---- */
 
 
@@ -4382,7 +4397,7 @@
         },
         admin: false,
         header: "Welcome to a ZeroProxy",
-        description: "ZeroProxies are websites which allow you to access ZeroNet Zites just like regular Sites",
+        description: ["ZeroProxies are websites which allow you to access ZeroNet Zites just like regular Sites", "     —     ", "Disclaimer: No content here is served by us nor are we associated with it in any way"],
         sites: [
           {
             bg: "bg1",
@@ -4574,8 +4589,16 @@
     };
 
     ZeroHello.prototype.onOpenWebsocket = function(e) {
+      var i, j, results;
       this.reloadSiteInfo();
-      return this.reloadServerInfo();
+      this.reloadServerInfo();
+      results = [];
+      for (i = j = 1; j < 10; i = j += 1) {
+        results.push(setTimeout((function() {
+          return Page.projector.scheduleRender();
+        }), i * 1000));
+      }
+      return results;
     };
 
     ZeroHello.prototype.reloadSiteInfo = function() {

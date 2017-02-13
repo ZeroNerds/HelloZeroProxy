@@ -32,7 +32,7 @@ class ZeroHello extends ZeroFrame
 			#}
 			admin:false,
 			header:"Welcome to a ZeroProxy",
-			description:"ZeroProxies are websites which allow you to access ZeroNet Zites just like regular Sites",
+			description:["ZeroProxies are websites which allow you to access ZeroNet Zites just like regular Sites","     —     ","Disclaimer: No content here is served by us nor are we associated with it in any way"],
 			sites:[
 				{
 					bg:"bg1",
@@ -179,6 +179,10 @@ class ZeroHello extends ZeroFrame
 	onOpenWebsocket: (e) =>
 		@reloadSiteInfo()
 		@reloadServerInfo()
+		for i in [1...10] by 1
+			setTimeout ( ->
+				Page.projector.scheduleRender()
+			), i*1000
 
 	reloadSiteInfo: =>
 		@cmd "siteInfo", {}, (site_info) =>

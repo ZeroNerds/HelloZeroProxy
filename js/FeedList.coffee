@@ -221,10 +221,23 @@ class FeedList extends Class
 			return h("div")
 
 	renderWelcome: (sites,append) =>
+		br=(ar) ->
+			if not Array.isArray(ar)
+				return [ar]
+			ar.reduce(
+				( (a,b) =>
+					if a.length
+						a.push(h("br"),b)
+					else
+						a.push(b)
+					return a
+				),
+				[]
+			)
 		h("div.welcome", [
 			h("img", {src: "img/logo.svg", height: 150, onerror: "this.src='img/logo.png'; this.onerror=null;"})
-			h("h1", @proxy_info().header)
-			h("div.served", @proxy_info().description),
+			h("h1", br(@proxy_info().header))
+			h("div.served", br(@proxy_info().description)),
 			if append
 				append
 			#h("div.served", ["This site currently served by ", h("b.peers", (Page.site_info["peers"] or "n/a")), " peers, without any central server."])
@@ -232,7 +245,7 @@ class FeedList extends Class
 				h("div.sites", [h("h3", "Promoted Sites:")]
 					.concat(sites.map((s) -> h("a.site.site-"+s.bg, {href: Text.getSiteUrl(s.url)}, [
 						h("div.title", [s.title])
-						h("div.description", [s.description])
+						h("div.description", br(s.description))
 						h("div.visit", [s.action])
 					])))
 				)
