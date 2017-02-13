@@ -6,11 +6,45 @@ class FeedList extends Class
 		@searched_info = null
 		@loading = false
 		@need_update = false
-		@limit = 10
-		@day_limit = 3
+		@updating = false
+		@limit = 30
+		@query_limit = 20
+		@query_day_limit = 3
+		@changed_back = false
 		Page.on_local_storage.then =>
 			@need_update = true
+			@reScroll(@)
 		@
+
+	reScroll: (_) ->
+		if Page.mode!="Sites" and not _.changed_back
+			return _.checkScroll()
+		for obj in [document.body,document.getElementById("FeedList")]
+			if not obj
+				continue
+			if obj.onscroll
+				continue
+			obj.onscroll = () =>
+				RateLimit 300, =>
+					_.checkScroll()
+
+	checkScroll: =>
+		if Page.mode!="Sites" and not @changed_back
+			@limit = 30
+			@query_limit = 20
+			@query_day_limit = 3
+			@changed_back = true
+			@update()
+			return true
+		else if document.body.scrollTop + window.innerHeight > document.getElementById("FeedList").clientHeight - 400 and not @updating and Page.mode=="Sites"
+			@changed_back = false
+			@limit += 30
+			@query_limit += 30
+			@query_day_limit += 5
+			@update()
+			return true
+		else
+			return false
 
 	displayRows: (rows, search) =>
 		@feeds = []
@@ -28,7 +62,7 @@ class FeedList extends Class
 			if last_row.body == row.body and last_row.date_added == row.date_added
 				continue  # Duplicate (eg. also signed up for comments and mentions)
 
-			if row_group.title == row.title and row_group.type == row.type and row.url == row_group.url
+			if row_group.type == row.type and row.url == row_group.url
 				if not row_group.body_more?
 					row_group.body_more = []
 					row_group.body_more.push(row.body)
@@ -47,13 +81,14 @@ class FeedList extends Class
 
 
 	update: (cb) =>
-		if @searching
+		if @searching or @updating
 			return false
 		if not Page.server_info or Page.server_info.rev < 1850
 			params = []
 		else
-			params = [@limit, @day_limit]
+			params = [@query_limit, @query_day_limit]
 		@logStart "Updating feed"
+		@updating = true
 		Page.cmd "feedQuery", params, (rows) =>
 			if rows.length < 10 and @day_limit
 				# Query without day limit if too few result
@@ -63,8 +98,10 @@ class FeedList extends Class
 				return false
 
 			@displayRows(rows)
+			setTimeout @checkScroll, 100
 			@logEnd "Updating feed"
 			if cb then cb()
+			@updating = false
 
 	search: (search, cb) =>
 		if Page.server_info.rev < 1230
@@ -255,17 +292,21 @@ class FeedList extends Class
 		if @searching != null
 			return "search"
 		else
-			return "newsfeed"
+			return "newsfeed.limit-#{@limit}"
 
 	render: =>
 		if @need_update
 			RateLimitCb(5000, @update)
 			@need_update = false
 
-		if @feeds and Page.site_list.loaded and document.body.className != "loaded"
-			document.body.className = "loaded"
+		if @feeds and Page.site_list.loaded and document.body.className != "loaded" and not @updating
+			if document.body.scrollTop > 500  # Scrolled down wait until next render
+				setTimeout (-> document.body.className = "loaded"), 2000
+			else
+				document.body.className = "loaded"
 
-		h("div#FeedList.FeedContainer", {classes: {faded: Page.mute_list.visible}},
+		setTimeout(@reScroll,10,@)
+		h("div#FeedList.FeedContainer", {onscroll:@checkScroll,classes: {faded: Page.mute_list.visible}},
 			if @proxy_info().show_error
 					[@renderWelcome([],
 						h("div.feeds-search-center-2.feeds-search",
@@ -308,7 +349,7 @@ class FeedList extends Class
 						else if @feeds.length == 0 and @searched
 							h("div.search-noresult", {enterAnimation: Animation.show}, "No results for #{@searched}")
 					),
-					h("div.FeedList."+@getClass(), {classes: {loading: @loading}}, @feeds[0..30].map(@renderFeed))]
+					h("div.FeedList."+@getClass(), {classes: {loading: @loading}}, @feeds[0..@limit].map(@renderFeed))]
 		)
 
 	onSiteInfo: (site_info) =>

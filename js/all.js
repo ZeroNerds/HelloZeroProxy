@@ -2212,21 +2212,72 @@
       this.search = bind(this.search, this);
       this.update = bind(this.update, this);
       this.displayRows = bind(this.displayRows, this);
+      this.checkScroll = bind(this.checkScroll, this);
       this.feeds = null;
       this.searching = null;
       this.searched = null;
       this.searched_info = null;
       this.loading = false;
       this.need_update = false;
-      this.limit = 10;
-      this.day_limit = 3;
+      this.updating = false;
+      this.limit = 30;
+      this.query_limit = 20;
+      this.query_day_limit = 3;
+      this.changed_back = false;
       Page.on_local_storage.then((function(_this) {
         return function() {
-          return _this.need_update = true;
+          _this.need_update = true;
+          return _this.reScroll(_this);
         };
       })(this));
       this;
     }
+
+    FeedList.prototype.reScroll = function(_) {
+      var i, len, obj, ref, results;
+      if (Page.mode !== "Sites" && !_.changed_back) {
+        return _.checkScroll();
+      }
+      ref = [document.body, document.getElementById("FeedList")];
+      results = [];
+      for (i = 0, len = ref.length; i < len; i++) {
+        obj = ref[i];
+        if (!obj) {
+          continue;
+        }
+        if (obj.onscroll) {
+          continue;
+        }
+        results.push(obj.onscroll = (function(_this) {
+          return function() {
+            return RateLimit(300, function() {
+              return _.checkScroll();
+            });
+          };
+        })(this));
+      }
+      return results;
+    };
+
+    FeedList.prototype.checkScroll = function() {
+      if (Page.mode !== "Sites" && !this.changed_back) {
+        this.limit = 30;
+        this.query_limit = 20;
+        this.query_day_limit = 3;
+        this.changed_back = true;
+        this.update();
+        return true;
+      } else if (document.body.scrollTop + window.innerHeight > document.getElementById("FeedList").clientHeight - 400 && !this.updating && Page.mode === "Sites") {
+        this.changed_back = false;
+        this.limit += 30;
+        this.query_limit += 30;
+        this.query_day_limit += 5;
+        this.update();
+        return true;
+      } else {
+        return false;
+      }
+    };
 
     FeedList.prototype.displayRows = function(rows, search) {
       var i, last_row, len, row, row_group;
@@ -2245,7 +2296,7 @@
         if (last_row.body === row.body && last_row.date_added === row.date_added) {
           continue;
         }
-        if (row_group.title === row.title && row_group.type === row.type && row.url === row_group.url) {
+        if (row_group.type === row.type && row.url === row_group.url) {
           if (row_group.body_more == null) {
             row_group.body_more = [];
             row_group.body_more.push(row.body);
@@ -2272,15 +2323,16 @@
 
     FeedList.prototype.update = function(cb) {
       var params;
-      if (this.searching) {
+      if (this.searching || this.updating) {
         return false;
       }
       if (!Page.server_info || Page.server_info.rev < 1850) {
         params = [];
       } else {
-        params = [this.limit, this.day_limit];
+        params = [this.query_limit, this.query_day_limit];
       }
       this.logStart("Updating feed");
+      this.updating = true;
       return Page.cmd("feedQuery", params, (function(_this) {
         return function(rows) {
           if (rows.length < 10 && _this.day_limit) {
@@ -2290,10 +2342,12 @@
             return false;
           }
           _this.displayRows(rows);
+          setTimeout(_this.checkScroll, 100);
           _this.logEnd("Updating feed");
           if (cb) {
-            return cb();
+            cb();
           }
+          return _this.updating = false;
         };
       })(this));
     };
@@ -2544,7 +2598,7 @@
       if (this.searching !== null) {
         return "search";
       } else {
-        return "newsfeed";
+        return "newsfeed.limit-" + this.limit;
       }
     };
 
@@ -2553,10 +2607,18 @@
         RateLimitCb(5000, this.update);
         this.need_update = false;
       }
-      if (this.feeds && Page.site_list.loaded && document.body.className !== "loaded") {
-        document.body.className = "loaded";
+      if (this.feeds && Page.site_list.loaded && document.body.className !== "loaded" && !this.updating) {
+        if (document.body.scrollTop > 500) {
+          setTimeout((function() {
+            return document.body.className = "loaded";
+          }), 2000);
+        } else {
+          document.body.className = "loaded";
+        }
       }
+      setTimeout(this.reScroll, 10, this);
       return h("div#FeedList.FeedContainer", {
+        onscroll: this.checkScroll,
         classes: {
           faded: Page.mute_list.visible
         }
@@ -2624,7 +2686,7 @@
           classes: {
             loading: this.loading
           }
-        }, this.feeds.slice(0, 31).map(this.renderFeed))
+        }, this.feeds.slice(0, +this.limit + 1 || 9e9).map(this.renderFeed))
       ]);
     };
 
@@ -2644,6 +2706,7 @@
   window.FeedList = FeedList;
 
 }).call(this);
+
 
 
 /* ---- /1ProxyQi6h6cy2gGybQECs2WgxnoEP4Cvr/js/FileList.coffee ---- */
@@ -4452,6 +4515,7 @@
         this.projector.replace($("#FeedList"), this.feed_list.render);
         this.projector.replace($("#SiteList"), this.site_list.render);
       } else if (mode === "Files") {
+        setTimeout(this.feed_list.checkScroll.bind(this.feed_list), 10);
         try {
           this.projector.detach(this.feed_list.render);
           this.projector.detach(this.site_list.render);
@@ -4524,18 +4588,7 @@
 
     ZeroHello.prototype.route = function(query) {
       this.params = Text.parseQuery(query);
-      this.log("Route", this.params);
-      if (this.params.to) {
-        this.on_site_info.then((function(_this) {
-          return function() {
-            return _this.message_create.show(_this.params.to);
-          };
-        })(this));
-        this.cmd("wrapperReplaceState", [{}, "", this.createUrl("to", "")]);
-      }
-      if (this.params.url === "Sent") {
-        return this.leftbar.folder_active = "sent";
-      }
+      return this.log("Route", this.params);
     };
 
     ZeroHello.prototype.createUrl = function(key, val) {
@@ -4551,6 +4604,26 @@
         params[key] = val;
       }
       return "?" + Text.encodeQuery(params);
+    };
+
+    ZeroHello.prototype.setUrl = function(url, mode) {
+      if (mode == null) {
+        mode = "push";
+      }
+      url = url.replace(/.*?\?/, "");
+      this.log("setUrl", this.history_state["url"], "->", url);
+      if (this.history_state["url"] === url) {
+        this.content.update();
+        return false;
+      }
+      this.history_state["url"] = url;
+      if (mode === "replace") {
+        this.cmd("wrapperReplaceState", [this.history_state, "", url]);
+      } else {
+        this.cmd("wrapperPushState", [this.history_state, "", url]);
+      }
+      this.route(url);
+      return false;
     };
 
     ZeroHello.prototype.loadLocalStorage = function() {
