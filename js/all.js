@@ -2576,7 +2576,7 @@
         return ar.reduce(((function(_this) {
           return function(a, b) {
             if (a.length) {
-              a.push(h("br"), b);
+              a.push(h("br#u" + (Math.random().toString().replace(/0/g, "").replace(".", ""))), b);
             } else {
               a.push(b);
             }

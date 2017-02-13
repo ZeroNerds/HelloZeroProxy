@@ -266,7 +266,9 @@ class FeedList extends Class
 			ar.reduce(
 				( (a,b) =>
 					if a.length
-						a.push(h("br"),b)
+						# "... had a br child removed, but there were more than one ... add unique key properties ..."
+						# that's why Math.random()
+						a.push(h("br#u#{Math.random().toString().replace(/0/g,"").replace(".","")}"),b)
 					else
 						a.push(b)
 					return a

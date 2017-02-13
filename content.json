@@ -36,8 +36,8 @@
    "size": 1095
   },
   "js/all.js": {
-   "sha512": "254a27fde0a1272efa6de01fcb75c28c789f1fbd33aa4be21bf7265a99fd994e",
-   "size": 190960
+   "sha512": "8ec151fc0fc6ae5af835eb7f8829217655f5fae6d83f3a1ac97255ca8fc1d44b",
+   "size": 191025
   },
   "languages/da.json": {
    "sha512": "a11d1da29b791c2de8a926d5c9177011dc00ab569a2b1fc8b435e5615658827f",
@@ -102,15 +102,15 @@
  },
  "ignore": "(?=^.git|^screenshot|(js|css)/(?!all.(js|css)))",
  "inner_path": "content.json",
- "modified": 1486993059,
+ "modified": 1486993356,
  "postmessage_nonce_security": true,
  "sign": [
-  29116428023339229962656101868316179330232914671753160784531018168002766548763,
-  32090573335797680816124133676236389308475818966056055469839022269813700652854
+  70912124202324838607197035506660377925947326083914218061906228541102006669350,
+  36217373609099981234298905307539432796794485781046323810350591946636931972320
  ],
  "signers_sign": "G8M370tmABI2znztuFlPL8S7U91CQu827GrngGtpGnREQWS8sbpV2r9lrREMvNEFZzvz9gWiU/aXbxTQtZaq4r4=",
  "signs": {
-  "1ProxyQi6h6cy2gGybQECs2WgxnoEP4Cvr": "HFARO0KQyJI+Gdsvd2N1KIatlONi12mCOralgrf5Kg6ed9bYz0deEuQZ0lXCY1BK38z5K/luUuhf38WttYCu1V0="
+  "1ProxyQi6h6cy2gGybQECs2WgxnoEP4Cvr": "HFjoOk0iPgakzSW4oUbXEymooUeBOpGpjxt745iDbmaAJFPbLUk2T87jo9/yBFisTpnh1FsZMkWMuI6wWO34BPk="
  },
  "signs_required": 1,
  "title": "ZeroProxy",
