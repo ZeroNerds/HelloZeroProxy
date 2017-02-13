@@ -1,6 +1,7 @@
 {
   "name": "ZeroProxy",
   "owner": "[Owner]",
+  "logo": "",
   "owner_contact": {
     "type": "email",
     "value": "nobody@example.com"

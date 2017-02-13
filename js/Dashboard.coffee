@@ -82,10 +82,10 @@ class Dashboard extends Class
 	handleDonateClick: =>
 		@menu_donate.items = []
 		@menu_donate.items.push ["Help to keep the ZeroNet project alive", "https://zeronet.readthedocs.org/en/latest/help_zeronet/donate/"]
-		@menu_donate.items.push ["Donate with Bitcoin: 1QDhxQ6PraUZa21ET5fYUCPgdrwBomnFgX","bitcoin:1QDhxQ6PraUZa21ET5fYUCPgdrwBomnFgX?Label=ZeroNet+donation"]
+		@menu_donate.items.push MenuURL({type:"Bitcoin",value:"1QDhxQ6PraUZa21ET5fYUCPgdrwBomnFgX?Label=ZeroNet+donation"},"Donate with %what: %val")
 		if @proxy_info and @proxy_info().donate
 			@menu_donate.items.push ["Help to keep this ZeroProxy alive"]
-			@menu_donate.items.push ["Donate with "+@proxy_info().donate.type+":\n"+@proxy_info().donate.value.split("?")[0],@getUrl(@proxy_info().donate.type,@proxy_info().donate.value)]
+			@menu_donate.items.push MenuURL(@proxy_info().donate,"Donate with %what: %val")
 
 		@menu_donate.toggle()
 		return false
@@ -101,21 +101,13 @@ class Dashboard extends Class
 
 		@menu_newversion.toggle()
 		return false
-	getType: (type) =>
-		if type=="mail" or type=="email"
-			return "mailto"
-		if type=="bitmessage"
-			return "bm"
-		return type
-	getUrl: (type_,val) =>
-		type=type_.toLowerCase().replace(/-/g,"")
-		@getType(type)+":"+val
+
 	handleOwnerClick: =>
 		@menu_proxyowner.items = []
 		if @proxy_info().owner_contact
-			@menu_proxyowner.items.push ["Contact via "+@proxy_info().owner_contact.type+": "+@proxy_info().owner_contact.value.split("?")[0],@getUrl(@proxy_info().owner_contact.type,@proxy_info().owner_contact.value)]
+			@menu_proxyowner.items.push MenuURL(@proxy_info().owner_contact,"Contact via %what: %val")
 		if @proxy_info().donate
-			@menu_proxyowner.items.push ["Donate with "+@proxy_info().donate.type+": "+@proxy_info().donate.value.split("?")[0],@getUrl(@proxy_info().donate.type,@proxy_info().donate.value)]
+			@menu_proxyowner.items.push MenuURL(@proxy_info().donate,"Donate with %what: %val")
 
 		if @menu_proxyowner.items.length
 			@menu_proxyowner.toggle()

@@ -275,19 +275,33 @@ class FeedList extends Class
 				),
 				[]
 			)
+		len=(ar) ->
+			if not Array.isArray(ar)
+				return !!ar
+			else
+				return !!ar.length
 		h("div.welcome", [
-			h("img", {src: "img/logo.svg", height: 150, onerror: "this.src='img/logo.png'; this.onerror=null;"})
-			h("h1", br(@proxy_info().header))
-			h("div.served", br(@proxy_info().description)),
+			if len(@proxy_info().logo)
+				h("img", {src: @proxy_info().logo, height: 150})
+			else
+				h("img", {src: "img/logo.svg", height: 150, onerror: "this.src='img/logo.png'; this.onerror=null;"})
+
+			if len(@proxy_info().header)
+				h("h1", br(@proxy_info().header))
+			if len(@proxy_info().description)
+				h("div.served", br(@proxy_info().description))
 			if append
 				append
 			#h("div.served", ["This site currently served by ", h("b.peers", (Page.site_info["peers"] or "n/a")), " peers, without any central server."])
 			if sites and sites.length
 				h("div.sites", [h("h3", "Promoted Sites:")]
-					.concat(sites.map((s) -> h("a.site.site-"+s.bg, {href: Text.getSiteUrl(s.url)}, [
-						h("div.title", [s.title])
-						h("div.description", br(s.description))
-						h("div.visit", [s.action])
+					.concat(sites.map((s) -> h("a.site.site-"+(s.bg or "bg1"), {href: Text.getSiteUrl(s.url)}, [
+						if len(s.title)
+							h("div.title", [s.title])
+						if len(s.description)
+							h("div.description", br(s.description))
+						if len(s.action)
+							h("div.visit", [s.action])
 					])))
 				)
 			])

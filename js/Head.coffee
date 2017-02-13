@@ -46,12 +46,19 @@ class Head extends Class
 		@menu_settings.items.push ["---"]
 		@menu_settings.items.push [@renderMenuLanguage(), null ]
 		@menu_settings.items.push ["---"]
-		@menu_settings.items.push [[h("span.emoji", "\uD83D\uDD07 "), "Manage muted users"], @handleManageMutesClick]
 		if @proxy_info and @proxy_info().admin
+			@menu_settings.items.push [[h("span.emoji", "\uD83D\uDD07 "), "Manage muted users"], @handleManageMutesClick]
 			@menu_settings.items.push ["Version #{Page.server_info.version} (rev#{Page.server_info.rev}): #{@formatUpdateInfo()}", @handleUpdateZeronetClick]
 			@menu_settings.items.push ["Shut down ZeroNet", @handleShutdownZeronetClick]
 		else
 			@menu_settings.items.push ["Version #{Page.server_info.version} (rev#{Page.server_info.rev})"]
+			if @proxy_info
+				if @proxy_info().owner_contact or @proxy_info().donate
+					@menu_settings.items.push ["---"]
+				if @proxy_info().owner_contact
+					@menu_settings.items.push MenuURL(@proxy_info().owner_contact,"Contact via %what: %val",true)
+				if @proxy_info().donate
+					@menu_settings.items.push MenuURL(@proxy_info().donate,"Donate with %what: %val",true)
 
 
 		if @menu_settings.visible

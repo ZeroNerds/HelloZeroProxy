@@ -1323,6 +1323,47 @@
 }).call(this);
 
 
+/* ---- /1ProxyQi6h6cy2gGybQECs2WgxnoEP4Cvr/js/utils/MenuURL.coffee ---- */
+
+
+(function() {
+  window.MenuURL = function(a, b, c) {
+    var getArray, getType, getUrl;
+    getType = function(type) {
+      if (type === "mail" || type === "email") {
+        return "mailto";
+      }
+      if (type === "bitmessage") {
+        return "bm";
+      }
+      return type;
+    };
+    getArray = function(val, text, br) {
+      var _val, _what, msg, res, url;
+      _val = val.value.split("?")[0];
+      _what = val.type;
+      url = getUrl(val.type, val.value);
+      msg = text.replace("%what", _what).replace("%val", _val);
+      if (br) {
+        msg = msg.split(": ");
+        msg[0] += ":";
+        res = [[msg[0], h("br"), msg[1]], url];
+      } else {
+        res = [msg, url];
+      }
+      return res;
+    };
+    getUrl = function(type_, val) {
+      var type;
+      type = type_.toLowerCase().replace(/-/g, "");
+      return getType(type) + ":" + val;
+    };
+    return getArray(a, b, c);
+  };
+
+}).call(this);
+
+
 /* ---- /1ProxyQi6h6cy2gGybQECs2WgxnoEP4Cvr/js/utils/Prototypes.coffee ---- */
 
 
@@ -1935,8 +1976,6 @@
       this.render = bind(this.render, this);
       this.handleBrowserwarningClick = bind(this.handleBrowserwarningClick, this);
       this.handleOwnerClick = bind(this.handleOwnerClick, this);
-      this.getUrl = bind(this.getUrl, this);
-      this.getType = bind(this.getType, this);
       this.handleNewversionClick = bind(this.handleNewversionClick, this);
       this.handleLogoutClick = bind(this.handleLogoutClick, this);
       this.handleDonateClick = bind(this.handleDonateClick, this);
@@ -2063,10 +2102,13 @@
     Dashboard.prototype.handleDonateClick = function() {
       this.menu_donate.items = [];
       this.menu_donate.items.push(["Help to keep the ZeroNet project alive", "https://zeronet.readthedocs.org/en/latest/help_zeronet/donate/"]);
-      this.menu_donate.items.push(["Donate with Bitcoin: 1QDhxQ6PraUZa21ET5fYUCPgdrwBomnFgX", "bitcoin:1QDhxQ6PraUZa21ET5fYUCPgdrwBomnFgX?Label=ZeroNet+donation"]);
+      this.menu_donate.items.push(MenuURL({
+        type: "Bitcoin",
+        value: "1QDhxQ6PraUZa21ET5fYUCPgdrwBomnFgX?Label=ZeroNet+donation"
+      }, "Donate with %what: %val"));
       if (this.proxy_info && this.proxy_info().donate) {
         this.menu_donate.items.push(["Help to keep this ZeroProxy alive"]);
-        this.menu_donate.items.push(["Donate with " + this.proxy_info().donate.type + ":\n" + this.proxy_info().donate.value.split("?")[0], this.getUrl(this.proxy_info().donate.type, this.proxy_info().donate.value)]);
+        this.menu_donate.items.push(MenuURL(this.proxy_info().donate, "Donate with %what: %val"));
       }
       this.menu_donate.toggle();
       return false;
@@ -2088,29 +2130,13 @@
       return false;
     };
 
-    Dashboard.prototype.getType = function(type) {
-      if (type === "mail" || type === "email") {
-        return "mailto";
-      }
-      if (type === "bitmessage") {
-        return "bm";
-      }
-      return type;
-    };
-
-    Dashboard.prototype.getUrl = function(type_, val) {
-      var type;
-      type = type_.toLowerCase().replace(/-/g, "");
-      return this.getType(type) + ":" + val;
-    };
-
     Dashboard.prototype.handleOwnerClick = function() {
       this.menu_proxyowner.items = [];
       if (this.proxy_info().owner_contact) {
-        this.menu_proxyowner.items.push(["Contact via " + this.proxy_info().owner_contact.type + ": " + this.proxy_info().owner_contact.value.split("?")[0], this.getUrl(this.proxy_info().owner_contact.type, this.proxy_info().owner_contact.value)]);
+        this.menu_proxyowner.items.push(MenuURL(this.proxy_info().owner_contact, "Contact via %what: %val"));
       }
       if (this.proxy_info().donate) {
-        this.menu_proxyowner.items.push(["Donate with " + this.proxy_info().donate.type + ": " + this.proxy_info().donate.value.split("?")[0], this.getUrl(this.proxy_info().donate.type, this.proxy_info().donate.value)]);
+        this.menu_proxyowner.items.push(MenuURL(this.proxy_info().donate, "Donate with %what: %val"));
       }
       if (this.menu_proxyowner.items.length) {
         this.menu_proxyowner.toggle();
@@ -2234,13 +2260,13 @@
     }
 
     FeedList.prototype.reScroll = function(_) {
-      var i, len, obj, ref, results;
+      var i, len1, obj, ref, results;
       if (Page.mode !== "Sites" && !_.changed_back) {
         return _.checkScroll();
       }
       ref = [document.body, document.getElementById("FeedList")];
       results = [];
-      for (i = 0, len = ref.length; i < len; i++) {
+      for (i = 0, len1 = ref.length; i < len1; i++) {
         obj = ref[i];
         if (!obj) {
           continue;
@@ -2283,7 +2309,7 @@
     };
 
     FeedList.prototype.displayRows = function(rows, search) {
-      var i, last_row, len, row, row_group;
+      var i, last_row, len1, row, row_group;
       this.feeds = [];
       if (!rows || !rows.sort) {
         return false;
@@ -2294,7 +2320,7 @@
       row_group = {};
       last_row = {};
       rows.reverse();
-      for (i = 0, len = rows.length; i < len; i++) {
+      for (i = 0, len1 = rows.length; i < len1; i++) {
         row = rows[i];
         if (last_row.body === row.body && last_row.date_added === row.date_added) {
           continue;
@@ -2568,7 +2594,7 @@
     };
 
     FeedList.prototype.renderWelcome = function(sites, append) {
-      var br;
+      var br, len;
       br = function(ar) {
         if (!Array.isArray(ar)) {
           return [ar];
@@ -2584,15 +2610,25 @@
           };
         })(this)), []);
       };
+      len = function(ar) {
+        if (!Array.isArray(ar)) {
+          return !!ar;
+        } else {
+          return !!ar.length;
+        }
+      };
       return h("div.welcome", [
-        h("img", {
+        len(this.proxy_info().logo) ? h("img", {
+          src: this.proxy_info().logo,
+          height: 150
+        }) : h("img", {
           src: "img/logo.svg",
           height: 150,
           onerror: "this.src='img/logo.png'; this.onerror=null;"
-        }), h("h1", br(this.proxy_info().header)), h("div.served", br(this.proxy_info().description)), append ? append : void 0, sites && sites.length ? h("div.sites", [h("h3", "Promoted Sites:")].concat(sites.map(function(s) {
-          return h("a.site.site-" + s.bg, {
+        }), len(this.proxy_info().header) ? h("h1", br(this.proxy_info().header)) : void 0, len(this.proxy_info().description) ? h("div.served", br(this.proxy_info().description)) : void 0, append ? append : void 0, sites && sites.length ? h("div.sites", [h("h3", "Promoted Sites:")].concat(sites.map(function(s) {
+          return h("a.site.site-" + (s.bg || "bg1"), {
             href: Text.getSiteUrl(s.url)
-          }, [h("div.title", [s.title]), h("div.description", br(s.description)), h("div.visit", [s.action])]);
+          }, [len(s.title) ? h("div.title", [s.title]) : void 0, len(s.description) ? h("div.description", br(s.description)) : void 0, len(s.action) ? h("div.visit", [s.action]) : void 0]);
         }))) : void 0
       ]);
     };
@@ -2709,7 +2745,6 @@
   window.FeedList = FeedList;
 
 }).call(this);
-
 
 
 /* ---- /1ProxyQi6h6cy2gGybQECs2WgxnoEP4Cvr/js/FileList.coffee ---- */
@@ -3289,12 +3324,23 @@
       this.menu_settings.items.push(["---"]);
       this.menu_settings.items.push([this.renderMenuLanguage(), null]);
       this.menu_settings.items.push(["---"]);
-      this.menu_settings.items.push([[h("span.emoji", "\uD83D\uDD07 "), "Manage muted users"], this.handleManageMutesClick]);
       if (this.proxy_info && this.proxy_info().admin) {
+        this.menu_settings.items.push([[h("span.emoji", "\uD83D\uDD07 "), "Manage muted users"], this.handleManageMutesClick]);
         this.menu_settings.items.push(["Version " + Page.server_info.version + " (rev" + Page.server_info.rev + "): " + (this.formatUpdateInfo()), this.handleUpdateZeronetClick]);
         this.menu_settings.items.push(["Shut down ZeroNet", this.handleShutdownZeronetClick]);
       } else {
         this.menu_settings.items.push(["Version " + Page.server_info.version + " (rev" + Page.server_info.rev + ")"]);
+        if (this.proxy_info) {
+          if (this.proxy_info().owner_contact || this.proxy_info().donate) {
+            this.menu_settings.items.push(["---"]);
+          }
+          if (this.proxy_info().owner_contact) {
+            this.menu_settings.items.push(MenuURL(this.proxy_info().owner_contact, "Contact via %what: %val", true));
+          }
+          if (this.proxy_info().donate) {
+            this.menu_settings.items.push(MenuURL(this.proxy_info().donate, "Donate with %what: %val", true));
+          }
+        }
       }
       if (this.menu_settings.visible) {
         this.menu_settings.hide();
@@ -3398,6 +3444,7 @@
   window.Head = Head;
 
 }).call(this);
+
 
 
 /* ---- /1ProxyQi6h6cy2gGybQECs2WgxnoEP4Cvr/js/MuteList.coffee ---- */
@@ -4461,6 +4508,7 @@
           updateAll: true,
           checkFiles: true
         },
+        logo: "",
         admin: false,
         header: "Welcome to a ZeroProxy",
         description: ["ZeroProxies are websites which allow you to access ZeroNet Zites just like regular Sites", "     —     ", "Disclaimer: No content here is served by us nor are we associated with it in any way"],

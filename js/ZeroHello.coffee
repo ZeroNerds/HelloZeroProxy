@@ -21,6 +21,7 @@ class ZeroHello extends ZeroFrame
 				updateAll:true,
 				checkFiles:true
 			},
+			logo:"",
 			#owner:"nobody",
 			#owner_contact:{
 			#	type:"email",
