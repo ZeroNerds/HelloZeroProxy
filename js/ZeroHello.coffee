@@ -90,6 +90,7 @@ class ZeroHello extends ZeroFrame
 			@projector.replace($("#FeedList"), @feed_list.render)
 			@projector.replace($("#SiteList"), @site_list.render)
 		else if mode == "Files"
+			setTimeout(@feed_list.checkScroll.bind(@feed_list),10)
 			try
 				@projector.detach(@feed_list.render)
 				@projector.detach(@site_list.render)

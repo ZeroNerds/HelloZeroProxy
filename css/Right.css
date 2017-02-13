@@ -18,7 +18,8 @@
 #Dashboard .menu-tor .menu-item { white-space: nowrap; }
 #Dashboard .menu-port .menu-item { white-space: nowrap; }
 #Dashboard .menu-donate .menu-item { white-space: nowrap; }
-#Dashboard .dashboard-item.newversion { background-color: #35CD76; color: white; }
+#Dashboard .dashboard-item.newversion { background-color: #35a4cd; color: white; }
+#Dashboard .dashboard-item.owner { background-color: #35CD76; color: white; }
 #Dashboard .dashboard-item.donate { height: 18px; vertical-align: top; padding: 10px 19px; }
 #Dashboard .dashboard-item.donate:hover .icon-heart { transform: scale(1.2) }
 #Dashboard .dashboard-item.donate:hover .icon-heart:before, #Dashboard .dashboard-item.donate:hover .icon-heart:after { background-color: #FA6C8D }

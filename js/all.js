@@ -2133,11 +2133,11 @@
           href: "http://browsehappy.com/",
           onmousedown: this.handleBrowserwarningClick,
           onclick: Page.returnFalse
-        }, [h("span", "Unsupported browser")]) : void 0, this.menu_browserwarning.render(".menu-browserwarning"), this.proxy_info && this.proxy_info().owner ? h("a.newversion.dashboard-item", {
+        }, [h("span", "Unsupported browser")]) : void 0, this.menu_browserwarning.render(".menu-browserwarning"), this.proxy_info && this.proxy_info().owner ? h("a.owner.dashboard-item", {
           href: "#Owner",
           onmousedown: this.handleOwnerClick,
           onclick: Page.returnFalse
-        }, "Proxy Owner: " + (this.proxy_info().owner)) : this.proxy_info ? h("a.newversion.dashboard-item", {
+        }, "Proxy Owner: " + (this.proxy_info().owner)) : this.proxy_info ? h("a.owner.dashboard-item", {
           href: "https://github.com/mkg20001/HelloZeroProxy#setup"
         }, "Use this as your proxy's homepage") : void 0, this.menu_proxyowner.render(".menu-newversion"), parseFloat(Page.server_info.version.replace(".", "0")) < parseFloat(Page.latest_version.replace(".", "0")) && this.proxy_info && this.proxy_info().admin ? h("a.newversion.dashboard-item", {
           href: "#Update",
@@ -2183,6 +2183,7 @@
   window.Dashboard = Dashboard;
 
 }).call(this);
+
 
 
 /* ---- /1ProxyQi6h6cy2gGybQECs2WgxnoEP4Cvr/js/FeedList.coffee ---- */
@@ -2706,7 +2707,6 @@
   window.FeedList = FeedList;
 
 }).call(this);
-
 
 
 /* ---- /1ProxyQi6h6cy2gGybQECs2WgxnoEP4Cvr/js/FileList.coffee ---- */

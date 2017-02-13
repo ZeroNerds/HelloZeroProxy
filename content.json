@@ -12,8 +12,8 @@
    "size": 550
   },
   "css/all.css": {
-   "sha512": "9d0a76f22972415cf037b4f94a041c27a3207674a6b22186dc71fab8fe537741",
-   "size": 210495
+   "sha512": "6576fab0593c63a806fd2b10d5e53c4d6d568868f25ba61640a3edbfdcfe19c3",
+   "size": 210573
   },
   "img/loading-circle.gif": {
    "sha512": "339baf1bccb9b80ae29c2493e73b40cf0588c96fc095954b475dea0538aaa929",
@@ -36,8 +36,8 @@
    "size": 1095
   },
   "js/all.js": {
-   "sha512": "cd3fb2d4ec5fd68a282a46057949072d744a07cbdf15f3d310fe937e2c5cd69d",
-   "size": 190886
+   "sha512": "3179c92ac8798e02baa958b53db006459b8b135c7916d2ded92e5d2d42b25a16",
+   "size": 190876
   },
   "languages/da.json": {
    "sha512": "a11d1da29b791c2de8a926d5c9177011dc00ab569a2b1fc8b435e5615658827f",
@@ -102,15 +102,15 @@
  },
  "ignore": "(?=^.git|^screenshot|(js|css)/(?!all.(js|css)))",
  "inner_path": "content.json",
- "modified": 1486992118,
+ "modified": 1486992497,
  "postmessage_nonce_security": true,
  "sign": [
-  87125115850836405735630380980855855393225396558180942004224087359161921471933,
-  99368478782128990355404410516635911934852541737264688469521621230906998872033
+  83276596376043723103981105595226097361665262763010559882380224341487610322454,
+  102215980201098294718552989773999256874349615030498220614348601860295684378206
  ],
  "signers_sign": "G8M370tmABI2znztuFlPL8S7U91CQu827GrngGtpGnREQWS8sbpV2r9lrREMvNEFZzvz9gWiU/aXbxTQtZaq4r4=",
  "signs": {
-  "1ProxyQi6h6cy2gGybQECs2WgxnoEP4Cvr": "HNyOAcsF69BbJdVoLkBEs1jP8LmVGc/1xc1ciYqQcU30EulZ9BCN60vGRhHCGaGep89hBmMVpAQo0YcR2tP1u9A="
+  "1ProxyQi6h6cy2gGybQECs2WgxnoEP4Cvr": "HK8Sywba5pknWpn2qWqjm3XWu3q1z/4TKRvXLQWUMgIrxmKDrJ0vLOKauqH8Js1KsaXlKHSsE3hPcbCQFpEPEKs="
  },
  "signs_required": 1,
  "title": "ZeroProxy",

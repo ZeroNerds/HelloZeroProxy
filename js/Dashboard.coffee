@@ -139,9 +139,9 @@ class Dashboard extends Class
 				@menu_browserwarning.render(".menu-browserwarning")
 
 				if @proxy_info and @proxy_info().owner
-					h("a.newversion.dashboard-item", {href: "#Owner", onmousedown: @handleOwnerClick, onclick: Page.returnFalse}, "Proxy Owner: #{@proxy_info().owner}")
+					h("a.owner.dashboard-item", {href: "#Owner", onmousedown: @handleOwnerClick, onclick: Page.returnFalse}, "Proxy Owner: #{@proxy_info().owner}")
 				else if @proxy_info
-					h("a.newversion.dashboard-item", {href: "https://github.com/mkg20001/HelloZeroProxy#setup"}, "Use this as your proxy's homepage")
+					h("a.owner.dashboard-item", {href: "https://github.com/mkg20001/HelloZeroProxy#setup"}, "Use this as your proxy's homepage")
 				@menu_proxyowner.render(".menu-newversion")
 
 				# Update
